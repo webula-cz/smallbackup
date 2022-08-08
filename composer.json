@@ -1,0 +1,10 @@
+{
+    "name": "webula/smallbackup-plugin",
+    "description": "Backup and backup management of databases",
+    "homepage": "https://www.webula.cz",
+    "type": "october-plugin",
+    "require": {
+        "php": ">=7.4"
+    },
+    "minimum-stability": "dev"
+}

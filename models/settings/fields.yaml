@@ -1,0 +1,43 @@
+fields:
+    _title:
+        label: webula.smallbackup::lang.plugin.name
+        comment: webula.smallbackup::lang.plugin.description
+        type: section
+
+    enabled:
+        label: webula.smallbackup::lang.settings.enabled
+        span: left
+        type: switch
+
+    cleanup_interval:
+        label: webula.smallbackup::lang.settings.cleanup_interval
+        span: left
+        type: number
+        step: 1
+        min: 1
+        max: 120
+        default: 7
+        trigger:
+            action: show
+            field: enabled
+            condition: checked
+
+    excluded_tables:
+        label: webula.smallbackup::lang.settings.excluded_tables
+        span: left
+        type: taglist
+        options: getExcludeTablesOptions
+        customTags: false
+        trigger:
+            action: show
+            field: enabled
+            condition: checked
+
+    use_compression:
+        label: webula.smallbackup::lang.settings.use_compression
+        span: left
+        type: switch
+        trigger:
+            action: show
+            field: enabled
+            condition: checked
