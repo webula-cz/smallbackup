@@ -29,27 +29,23 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        $this->registerConsoleCommand('smallbackup.backup', Console\Backup::class);
+        $this->registerConsoleCommand('smallbackup.db', Console\BackupDb::class);
+        $this->registerConsoleCommand('smallbackup.theme', Console\BackupTheme::class);
     }
 
     /**
-     * Boot method, called right before the request route.
+     * Registers schedule calls implemented in this plugin.
      *
-     * @return array
+     * @return void
      */
-    public function boot()
+    public function registerSchedule($schedule)
     {
-        //dump(\App::make(Classes\DbBackupManager::class)->backup());
-    }
-
-    /**
-     * Registers any front-end components implemented in this plugin.
-     *
-     * @return array
-     */
-    public function registerComponents()
-    {
-        return [];
+        if (Models\Settings::get('db_auto')) {
+            $schedule->command('smallbackup:db')->daily();
+        }
+        if (Models\Settings::get('theme_auto')) {
+            $schedule->command('smallbackup:theme')->daily();
+        }
     }
 
     /**
@@ -66,6 +62,7 @@ class Plugin extends PluginBase
                 'category'    => 'Small plugins',
                 'icon' => 'icon-database',
                 'class' => Models\Settings::class,
+                'url' => \Backend::url('webula/smallbackup/settings/update'),
                 'keywords' => 'database backup',
                 'order' => 991,
                 'permissions' => ['webula.smallbackup.access_settings'],

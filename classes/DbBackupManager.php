@@ -1,108 +1,72 @@
 <?php namespace Webula\SmallBackup\Classes;
 
-use File, Str;
-use Carbon\Carbon;
 use Db;
+use File;
 use Exception;
 use October\Rain\Filesystem\Zip;
 use Webula\SmallBackup\Models\Settings;
 
-class DbBackupManager
+class DbBackupManager extends BackupManager
 {
-
     /**
-     * Backup folder
+     * Backup file prefix
      *
      * @var string
      */
-    protected $folder;
-
-
-    public function __construct(string $folder = 'app/uploads/protected/backup')
-    {
-        $this->folder = trim($folder, '/');
-
-        if (!File::isDirectory(storage_path($this->folder)))  {
-            File::makeDirectory(storage_path($this->folder), config('cms.defaultMask.folder'), true);
-        }
-    }
-
+    protected $prefix = 'wsb-db-';
 
     /**
      * Backup DB by connection name (null = default)
      *
-     * @param string|null $connectionName
-     * @return string backup file
+     * @param string|null $source connection name
+     * @return string file with current backup
      */
-    public function backup(string $connectionName = null): string
+    public function backup(string $source = null): string
     {
-        $connectionName = $connectionName ?: config('database.default');
+        $connectionName = $source ?: config('database.default');
         $connectionDriver = config('database.connections.' . $connectionName . '.driver');
 
         if ($connectionDriver == 'mysql') {
-            $filename = 'wsb-' . now()->format('Y-m-d') . '.sql';
-            $stream = (new MysqlBackup(Db::connection($connectionName)))
-                ->backupStream();
+            $filename = $this->prefix . now()->format('Y-m-d') . '.sql';
+            $stream = (new Drivers\Mysql(
+                    Db::connection($connectionName),
+                    $this->getExcludedTables()
+                ))->backupStream();
             File::put(
-                storage_path($this->folder . '/' . $filename),
+                $this->folder . '/' . $filename,
                 $stream
             );
         } elseif ($connectionDriver == 'sqlite') {
-            $filename = 'wsb-' . now()->format('Y-m-d') . '.sqlite';
+            $filename = $this->prefix . now()->format('Y-m-d') . '.sqlite';
             File::copy(
                 config('database.connections.' . $connectionName . '.database'),
-                storage_path($this->folder . '/' . $filename)
+                $this->folder . '/' . $filename
             );
         } else {
-            throw new Exception("Unknown database driver {$connectionDriver}! This driver is not implemented yet.");
+            throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_database_driver', ['driver' => $connectionDriver]));
         }
 
         if ($this->getUseCompression()) {
             $zipFilename = $filename . '.zip';
             Zip::make(
-                storage_path($this->folder . '/' . $zipFilename),
-                storage_path($this->folder . '/' . $filename)
+                $this->folder . '/' . $zipFilename,
+                $this->folder . '/' . $filename
             );
-            File::delete(storage_path($this->folder . '/' . $filename));
+            File::delete($this->folder . '/' . $filename);
 
-            return $zipFilename;
+            return $this->folder . '/' . $zipFilename;
         }
 
-        return $filename;
+        return $this->folder . '/' . $filename;
     }
 
     /**
-     * Cleanup old backups
+     * Get list of excluded tables from db backup
      *
-     * @return integer Number of deleted backups
+     * @return array
      */
-    public function clear(): int
+    protected function getExcludedTables(): array
     {
-        $counter = 0;
-        foreach (File::files(storage_path($this->folder)) as $file) {
-            $outdated = Str::startsWith($file->getFilename(), 'wsb-')
-                && Carbon::createFromTimestamp($file->getCTime(), config('app.timezone'))
-                    ->lt(now()->subDays($this->getCleanupInterval())
-                );
-
-            if ($outdated) {
-                File::delete($file->getPathname());
-                $counter++;
-            }
-        }
-
-        return $counter;
-    }
-
-
-    protected function getCleanupInterval(): int
-    {
-        return intval(Settings::get('cleanup_interval', 7));
-    }
-
-
-    protected function getUseCompression(): bool
-    {
-        return boolval(Settings::get('use_compression'));
+        return (array)Settings::get('db_excluded_tables');
     }
 }

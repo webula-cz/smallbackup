@@ -1,0 +1,34 @@
+<div class="control-list">
+    <table class="table data">
+        <thead>
+            <tr>
+                <th><span><?= e(trans('webula.smallbackup::lang.backup.list.filename')) ?></span></th>
+                <th><span><?= e(trans('webula.smallbackup::lang.backup.list.created_at')) ?></span></th>
+                <th><span>&nbsp;</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($files)): ?>
+                <?php foreach ($files as $file): ?>
+                    <tr>
+                        <td><?= e($file->getFilename()) ?></td>
+                        <td><?= \Backend::dateTime($file->getCTime()) ?></td>
+                        <td class="column-button nolink">
+                            <a href="<?= e(\Backend::url('webula/smallbackup/settings/download/' . base64_encode(str_after($file->getPathname(), base_path())))) ?>"
+                                class="btn btn-secondary btn-sm"
+                                download="<?= e($file->getFilename()) ?>"><?= e(trans('webula.smallbackup::lang.backup.list.download')) ?></a>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            <?php else: ?>
+                <tr class="no-data">
+                    <td colspan="3" class="nolink">
+                        <p class="no-data">
+                            <?= e(trans('backend.list.no_records')) ?>
+                        </p>
+                    </td>
+                </tr>
+            <?php endif ?>
+        </tbody>
+    </table>
+</div>

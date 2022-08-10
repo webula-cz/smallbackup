@@ -1,12 +1,8 @@
-<?php namespace Webula\SmallBackup\Classes;
+<?php namespace Webula\SmallBackup\Classes\Drivers;
 
-use Db;
-use File;
-use Carbon\Carbon;
 use Illuminate\Database\Connection;
-use Webula\SmallBackup\Models\Settings;
 
-class MysqlBackup implements Contracts\Backup
+class Mysql implements Contracts\BackupStream
 {
     /**
      * Connection handler
@@ -15,10 +11,18 @@ class MysqlBackup implements Contracts\Backup
      */
     protected $connection;
 
+    /**
+     * List of excluded tables from stream
+     *
+     * @var array
+     */
+    protected $excludedTables = [];
 
-    public function __construct(Connection $connection)
+
+    public function __construct(Connection $connection, array $excludedTables = [])
     {
         $this->connection = $connection;
+        $this->excludedTables = $excludedTables;
     }
 
     /**
@@ -35,7 +39,7 @@ class MysqlBackup implements Contracts\Backup
 
         $tables = collect($this->getListOfTables())
             ->map(fn ($item) => $item->getName())
-            ->diff($this->getExcludedTables())
+            ->diff($this->excludedTables)
             ->toArray();
 
         foreach ($tables as $table) {
@@ -50,7 +54,7 @@ class MysqlBackup implements Contracts\Backup
 
         $views = collect($this->getListOfViews())
             ->map(fn ($item) => $item->getName())
-            ->diff($this->getExcludedTables())
+            ->diff($this->excludedTables)
             ->toArray();
 
         foreach ($views as $view) {
@@ -65,11 +69,6 @@ class MysqlBackup implements Contracts\Backup
 
         return $stream;
     }
-
-
-    //
-    //
-    //
 
     /**
      * Get sql dump header
@@ -267,7 +266,6 @@ class MysqlBackup implements Contracts\Backup
         return collect($this->connection->getDoctrineSchemaManager()->listTableColumns($table))
             ->map(fn ($item) => $item->getName())
             ->toArray();
-        // return array_keys($this->connection->getDoctrineSchemaManager()->listTableColumns($table));
     }
 
     /**
@@ -325,13 +323,4 @@ class MysqlBackup implements Contracts\Backup
     }
 
 
-    /**
-     * Get list of excluded tables
-     *
-     * @return array
-     */
-    protected function getExcludedTables(): array
-    {
-        return (array)Settings::get('excluded_tables');
-    }
 }

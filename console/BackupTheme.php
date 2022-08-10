@@ -4,20 +4,19 @@ use Exception;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Webula\SmallBackup\Classes\DbBackupManager;
-use Webula\SmallBackup\Models\Settings;
+use Webula\SmallBackup\Classes\ThemeBackupManager;
 
-class Backup extends Command
+class BackupTheme extends Command
 {
     /**
      * @var string The console command name.
      */
-    protected $name = 'smallbackup:backup';
+    protected $name = 'smallbackup:theme';
 
     /**
      * @var string The console command description.
      */
-    protected $description = 'Backup current database.';
+    protected $description = 'Backup current or default theme.';
 
     /**
      * Execute the console command.
@@ -25,17 +24,14 @@ class Backup extends Command
      */
     public function handle()
     {
-        if (!Settings::get('enabled')) {
-            $this->output->write('Small backup is not enabled.');
-            return;
-        }
-
-        $manager = new DbBackupManager;
+        $manager = new ThemeBackupManager();
         if (!$this->option('no-cleanup')) {
             try {
                 $this->output->write('Cleanup...');
-                $affected = $manager->clear();
-                $this->output->success("'{$affected}' old backups were deleted!");
+                $deleted = $manager->clear();
+                $this->output->success(
+                    trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted])
+                );
             } catch (Exception $ex) {
                 $this->output->error("Cleanup failed! " . $ex->getMessage());
             }
@@ -44,7 +40,9 @@ class Backup extends Command
         try {
             $this->output->write('Backup...');
             $file = $manager->backup($this->argument('name'));
-            $this->output->success("Backup was made successfully in file '{$file}'!");
+            $this->output->success(
+                trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => $file])
+            );
         } catch (Exception $ex) {
             $this->output->error("Backup failed! " . $ex->getMessage());
         }
@@ -60,7 +58,7 @@ class Backup extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::OPTIONAL, 'Database connection name.'],
+            ['name', InputArgument::OPTIONAL, 'Another theme name.'],
         ];
     }
 

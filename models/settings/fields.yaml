@@ -4,10 +4,11 @@ fields:
         comment: webula.smallbackup::lang.plugin.description
         type: section
 
-    enabled:
-        label: webula.smallbackup::lang.settings.enabled
+    backup_folder:
+        label: webula.smallbackup::lang.settings.backup_folder
+        default: 'app/uploads/protected/backup'
         span: left
-        type: switch
+        type: text
 
     cleanup_interval:
         label: webula.smallbackup::lang.settings.cleanup_interval
@@ -17,27 +18,44 @@ fields:
         min: 1
         max: 120
         default: 7
-        trigger:
-            action: show
-            field: enabled
-            condition: checked
-
-    excluded_tables:
-        label: webula.smallbackup::lang.settings.excluded_tables
-        span: left
-        type: taglist
-        options: getExcludeTablesOptions
-        customTags: false
-        trigger:
-            action: show
-            field: enabled
-            condition: checked
 
     use_compression:
         label: webula.smallbackup::lang.settings.use_compression
         span: left
         type: switch
-        trigger:
-            action: show
-            field: enabled
-            condition: checked
+
+    _section_db:
+        label: webula.smallbackup::lang.settings.section_db
+        type: section
+
+    db_auto:
+        label: webula.smallbackup::lang.settings.db_auto
+        comment: webula.smallbackup::lang.settings.db_auto__comment
+        span: left
+        type: switch
+
+    db_excluded_tables:
+        label: webula.smallbackup::lang.settings.db_excluded_tables
+        comment: webula.smallbackup::lang.settings.db_excluded_tables__comment
+        span: full
+        type: taglist
+        options: getExcludeTablesOptions
+        customTags: false
+
+    _section_theme:
+        label: webula.smallbackup::lang.settings.section_theme
+        type: section
+
+    theme_auto:
+        label: webula.smallbackup::lang.settings.theme_auto
+        comment: webula.smallbackup::lang.settings.theme_auto__comment
+        span: left
+        type: switch
+
+    _section_listing:
+        label: webula.smallbackup::lang.settings.section_listing
+        type: section
+
+    _backup:
+        type: partial
+        path: $/webula/smallbackup/controllers/settings/_backup.htm
