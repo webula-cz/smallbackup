@@ -69,4 +69,14 @@ class DbBackupManager extends BackupManager
     {
         return (array)Settings::get('db_excluded_tables');
     }
+
+    /**
+     * Get using compression from settings file
+     *
+     * @return boolean
+     */
+    protected function getUseCompression(): bool
+    {
+        return boolval(Settings::get('db_use_compression'));
+    }
 }

@@ -1,16 +1,27 @@
 # smallbackup-plugin
-Default folder: `storage/app/uploads/protected/backup`
+Plugin má za úkol jednoduše zazálohovat databázi a složku s tématem vzhledu, uchovat tuto zálohu po určený počet dní a umožnit její snadné stáhnutí v backendu October CMS.
 
-## Console command
-Záloha databáze: `php artisan smallbackup:db [connectionName] [--no-cleanup]` (connectionName je název připojení v config/database.php; vynechat = defaultní)
+Defaultní místo pro zálohy je složka `storage/app/uploads/protected/backup` a interval ponechání zálohy 7 dní.
 
-Záloha tématu vzhledu: `php artisan smallbackup:theme [themeName] [--no-cleanup]` (themeName je složka tématu v themes/; vynechat = aktivní téma)
+Zálohování je možné vyvolat automaticky nebo ručně, dle nastavení v backendu OctoberCMS. Manuální řešení poskytuje použití příkazu nebo helperů (viz níže).
 
-## Scheduler
-V nastavení lze zapnout automatický režim, ve kterém je naplánována úloha zálohování na jednou denně při spouštění cronem - viz [dokumentace October CMS](https://docs.octobercms.com/1.x/setup/installation.html#review-configuration).
+## Automatické zálohování
+### Scheduler
+V nastavení lze zapnout automatický režim, ve kterém je naplánována úloha zálohování 1x denně při spouštění cronem - viz [dokumentace October CMS](https://docs.octobercms.com/1.x/setup/installation.html#review-configuration).
 
-## Artisan stránka
-Lze použít helpery (pozor, nutno vnutit do composer autoloadu - nejlépe pomocí `composer update`). Chyby píší automaticky do logu.
+## Manuální zálohování
+
+### Backend settings
+V backendu je v nastavení tohoto pluginu tlačítko pro okamžité provedení zálohy.
+
+### Console command
+Příkaz pro zálohu databáze je `php artisan smallbackup:db [connectionName] [--no-cleanup]` (connectionName je název připojení v config/database.php; vynechat = defaultní)
+
+Příkaz pro zálohu tématu vzhledu: `php artisan smallbackup:theme [themeName] [--no-cleanup]` (themeName je složka tématu v themes/; vynechat = aktivní téma)
+
+### Artisan stránka
+Na artisan/schedule CMS stránce lze použít helpery. Chyby zapisují automaticky do error logu.
+
 ```title = "artisan"
 url = "/artisan/schedule"
 is_hidden = 0

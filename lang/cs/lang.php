@@ -9,19 +9,21 @@ return [
         'list' => [
             'db' => 'Databáze',
             'theme' => 'Témata vzhledu',
-            'backup_now' => 'Ihned zazálohovat',
             'filename' => 'Soubor zálohy',
             'created_at' => 'Vytvořen',
+        ],
+        'control' => [
             'download' => 'stáhnout',
+            'backup_now' => 'Ihned zazálohovat',
         ],
         'flash' => [
-            'expired_deleted' => ':deleted expired backups were successfully deleted.',
-            'successfull_backup' => 'Backup was successfully made into file :file.',
+            'expired_deleted' => 'Úspěšně bylo smazáno :deleted expirovaných záloh.',
+            'successfull_backup' => 'Záloha byla úspěšně vytvořena do souboru :file.',
 
-            'cleanup_and_backup' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :file.',
+            'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny do souborů :files.',
 
-            'unknown_database_driver' => 'Unknown database driver :driver! This driver is not implemented yet. Please send PR.',
-            'unknown_theme' => 'Unknown theme! Cannot find theme with code name :theme.',
+            'unknown_database_driver' => 'Neznámý databázový ovladač :driver! Tento ovladač nebyl ještě implementován. Prosíme zašlete nám své PR.',
+            'unknown_theme' => 'Neznámé téma! Téma s kódovým názvem :theme nebylo nalezeno.',
         ],
     ],
 
@@ -32,16 +34,16 @@ return [
     'settings' => [
         'backup_folder' => 'Adresář pro umístění záloh',
         'cleanup_interval' => 'Interval ponechání starých záloh (dní)',
-        'use_compression' => 'Použít ZIP kompresi',
+        'db_use_compression' => 'Použít ZIP kompresi',
 
         'db_auto' => 'Zapnout automatický režim zálohování databáze',
-        'db_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace OCMS. Manuální režim vyžaduje spuštění procesu buď pomocí příkazu nebo jiným dokumentovaným způsobem.',
+        'db_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
 
         'db_excluded_tables' => 'Tabulky vyjmuté ze zálohování',
         'db_excluded_tables__comment' => 'Jen pro případ MySQL databází. SQLite se zálohuje celosouborově.',
 
         'theme_auto' => 'Zapnout automatický režim zálohování aktuálního tématu',
-        'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace OCMS. Manuální režim vyžaduje spuštění procesu buď pomocí příkazu nebo jiným dokumentovaným způsobem.',
+        'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
 
         'section_db' => 'Databáze',
         'section_theme' => 'Téma vzhledu',

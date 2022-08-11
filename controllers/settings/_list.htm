@@ -16,7 +16,7 @@
                         <td class="column-button nolink">
                             <a href="<?= e(\Backend::url('webula/smallbackup/settings/download/' . base64_encode(str_after($file->getPathname(), base_path())))) ?>"
                                 class="btn btn-secondary btn-sm"
-                                download="<?= e($file->getFilename()) ?>"><?= e(trans('webula.smallbackup::lang.backup.list.download')) ?></a>
+                                download="<?= e($file->getFilename()) ?>"><?= e(trans('webula.smallbackup::lang.backup.control.download')) ?></a>
                         </td>
                     </tr>
                 <?php endforeach ?>

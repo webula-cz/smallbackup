@@ -6,6 +6,8 @@
     <?= $this->makePartial('list', ['files' => $this->getThemeBackupList()]) ?>
 
     <div class="text-center m-b">
-        <button type="button" class="btn btn-secondary" data-request="onBackup"><?= e(trans('webula.smallbackup::lang.backup.list.backup_now')) ?></button>
+        <button type="button" class="btn btn-secondary" data-request="onBackup">
+            <?= e(trans('webula.smallbackup::lang.backup.control.backup_now')) ?>
+        </button>
     </div>
 </div>

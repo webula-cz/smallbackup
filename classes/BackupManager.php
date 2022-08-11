@@ -2,9 +2,6 @@
 
 use File, Str;
 use Carbon\Carbon;
-use Db;
-use Exception;
-use October\Rain\Filesystem\Zip;
 use Webula\SmallBackup\Models\Settings;
 
 abstract class BackupManager
@@ -25,7 +22,7 @@ abstract class BackupManager
     protected $prefix;
 
 
-    public function __construct(string $folder = 'storage/app/uploads/protected/backup', string $prefix = null)
+    public function __construct(string $folder = null, string $prefix = null)
     {
         $this->folder = base_path(trim($folder ?: $this->getBackupFolder(), '/'));
 
@@ -89,7 +86,7 @@ abstract class BackupManager
      */
     protected function getBackupFolder(): string
     {
-        return strval(Settings::get('backup_folder'));
+        return strval(Settings::get('backup_folder', 'storage/app/uploads/protected/backup'));
     }
 
     /**
@@ -100,15 +97,5 @@ abstract class BackupManager
     protected function getCleanupInterval(): int
     {
         return intval(Settings::get('cleanup_interval', 7));
-    }
-
-    /**
-     * Get using compression from settings file
-     *
-     * @return boolean
-     */
-    protected function getUseCompression(): bool
-    {
-        return boolval(Settings::get('use_compression'));
     }
 }

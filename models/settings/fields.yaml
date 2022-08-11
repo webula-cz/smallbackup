@@ -19,11 +19,6 @@ fields:
         max: 120
         default: 7
 
-    use_compression:
-        label: webula.smallbackup::lang.settings.use_compression
-        span: left
-        type: switch
-
     _section_db:
         label: webula.smallbackup::lang.settings.section_db
         type: section
@@ -31,16 +26,19 @@ fields:
     db_auto:
         label: webula.smallbackup::lang.settings.db_auto
         comment: webula.smallbackup::lang.settings.db_auto__comment
-        span: left
         type: switch
 
     db_excluded_tables:
         label: webula.smallbackup::lang.settings.db_excluded_tables
         comment: webula.smallbackup::lang.settings.db_excluded_tables__comment
-        span: full
         type: taglist
-        options: getExcludeTablesOptions
+        options: getExcludedTablesOptions
         customTags: false
+
+    db_use_compression:
+        label: webula.smallbackup::lang.settings.db_use_compression
+        span: left
+        type: switch
 
     _section_theme:
         label: webula.smallbackup::lang.settings.section_theme
@@ -49,13 +47,12 @@ fields:
     theme_auto:
         label: webula.smallbackup::lang.settings.theme_auto
         comment: webula.smallbackup::lang.settings.theme_auto__comment
-        span: left
         type: switch
 
     _section_listing:
         label: webula.smallbackup::lang.settings.section_listing
         type: section
 
-    _backup:
+    _listing:
         type: partial
-        path: $/webula/smallbackup/controllers/settings/_backup.htm
+        path: $/webula/smallbackup/controllers/settings/_listing.htm

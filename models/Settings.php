@@ -15,7 +15,7 @@ class Settings extends Model
     public $settingsFields = 'fields.yaml';
 
 
-    public function getExcludeTablesOptions()
+    public function getExcludedTablesOptions()
     {
         return \Db::connection()->getDoctrineSchemaManager()->listTableNames();
     }

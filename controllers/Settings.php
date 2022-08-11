@@ -11,6 +11,9 @@ use Webula\SmallBackup\Classes\{DbBackupManager, ThemeBackupManager};
 
 class Settings extends SystemSettings
 {
+    //
+    // OVERRIDE
+    //
 
     public function update($author = null, $plugin = null, $code = null)
     {
@@ -30,19 +33,32 @@ class Settings extends SystemSettings
         return parent::update_onResetDefault(...$this->getSegmentsFromRequest());
     }
 
-
+    /**
+     * List of db backups
+     *
+     * @return array
+     */
     public function getDbBackupList(): array
     {
         return (new DbBackupManager)->list();
     }
 
-
+    /**
+     * List of theme backups
+     *
+     * @return array
+     */
     public function getThemeBackupList(): array
     {
         return (new ThemeBackupManager)->list();
     }
 
-
+    /**
+     * Response downloaded file
+     *
+     * @param string $pathname
+     * @return mixed
+     */
     public function download($pathname)
     {
         $pathname = base_path(base64_decode($pathname));
@@ -52,26 +68,35 @@ class Settings extends SystemSettings
         return Response::make('File not found!', 404);
     }
 
-
+    /**
+     * onBackup event
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update_onBackup()
     {
         try {
             $manager = new DbBackupManager;
             $deleted = $manager->clear();
-            $filename[] = $manager->backup();
+            $files[] = $manager->backup();
 
             $manager = new ThemeBackupManager;
             $deleted += $manager->clear();
-            $filename[] = $manager->backup();
+            $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.cleanup_and_backup', ['deleted' => $deleted, 'file' => implode(', ', $filename)]));
+            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return Redirect::refresh();
+
         } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
     }
 
-
+    /**
+     * Get settings segment from URI
+     *
+     * @return array
+     */
     private function getSegmentsFromRequest(): array
     {
         $segments = explode('/', trim(str_after(Request::getUri(), Backend::url()), '/'));

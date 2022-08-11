@@ -1,5 +1,7 @@
 <?php namespace Webula\SmallBackup;
 
+include_once(__DIR__ . '/helpers/helpers.php'); // for version without Composer
+
 use System\Classes\PluginBase;
 
 /**
