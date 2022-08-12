@@ -3,6 +3,19 @@
     "description": "Backup and backup management of databases",
     "homepage": "https://www.webula.cz",
     "type": "october-plugin",
+    "authors": [
+        {
+            "name": "Jan Vince",
+            "email": "jan.vince@webula.cz",
+            "homepage": "https://www.webula.cz",
+            "role": "Developer"
+        },
+        {
+            "name": "Rike-cz",
+            "homepage": "https://xis.cz",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=7.4",
         "composer/installers": "~1.0"

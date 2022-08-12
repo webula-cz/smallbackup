@@ -19,45 +19,56 @@ class DbBackupManager extends BackupManager
      * Backup DB by connection name (null = default)
      *
      * @param string|null $source connection name
+     * @param bool $once do not overwrite existing backup file
      * @return string file with current backup
      */
-    public function backup(string $source = null): string
+    public function backup(string $source = null, bool $once = false): string
     {
         $connectionName = $source ?: config('database.default');
         $connectionDriver = config('database.connections.' . $connectionName . '.driver');
 
         if ($connectionDriver == 'mysql') {
             $filename = $this->prefix . now()->format('Y-m-d') . '.sql';
-            $stream = (new Drivers\Mysql(
-                    Db::connection($connectionName),
-                    $this->getExcludedTables()
-                ))->backupStream();
-            File::put(
-                $this->folder . '/' . $filename,
-                $stream
-            );
+            $pathname = $this->folder . '/' . $filename;
+
+            if (!$once || !File::exists($this->getUseCompression() ? $pathname . '.zip' : $pathname)) {
+                $stream = (new Drivers\Mysql(
+                        Db::connection($connectionName),
+                        $this->getExcludedTables()
+                    ))->backupStream();
+                File::put(
+                    $pathname,
+                    $stream
+                );
+            }
         } elseif ($connectionDriver == 'sqlite') {
             $filename = $this->prefix . now()->format('Y-m-d') . '.sqlite';
-            File::copy(
-                config('database.connections.' . $connectionName . '.database'),
-                $this->folder . '/' . $filename
-            );
+            $pathname = $this->folder . '/' . $filename;
+
+            if (!$once || !File::exists($this->getUseCompression() ? $pathname . '.zip' : $pathname)) {
+                File::copy(
+                    config('database.connections.' . $connectionName . '.database'),
+                    $pathname
+                );
+            }
         } else {
             throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_database_driver', ['driver' => $connectionDriver]));
         }
 
-        if ($this->getUseCompression()) {
+        if ($this->getUseCompression() && File::exists($pathname)) {
             $zipFilename = $filename . '.zip';
-            Zip::make(
-                $this->folder . '/' . $zipFilename,
-                $this->folder . '/' . $filename
-            );
-            File::delete($this->folder . '/' . $filename);
+            $zipPathname = $this->folder . '/' . $zipFilename;
 
-            return $this->folder . '/' . $zipFilename;
+            Zip::make(
+                $zipPathname,
+                $pathname
+            );
+            File::delete($pathname);
+
+            return $zipPathname;
         }
 
-        return $this->folder . '/' . $filename;
+        return $pathname;
     }
 
     /**

@@ -39,7 +39,7 @@ class BackupDb extends Command
 
         try {
             $this->output->write('Backup...');
-            $file = $manager->backup($this->argument('name'));
+            $file = $manager->backup($this->argument('name'), boolval($this->option('once')));
             $this->output->success(
                 trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => $file])
             );
@@ -69,6 +69,7 @@ class BackupDb extends Command
     protected function getOptions()
     {
         return [
+            ['once', null, InputOption::VALUE_NONE, 'Do not overwrite existing backup file.', null],
             ['no-cleanup', 'nocleanup', InputOption::VALUE_NONE, 'Do not clean up old backups.', null],
         ];
     }

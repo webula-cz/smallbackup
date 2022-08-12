@@ -1,12 +1,12 @@
 <?php
 if (!function_exists('wsb_backup_db')) {
-    function wsb_backup_db(string $connectionName = null, bool $noCleanup = false): bool {
+    function wsb_backup_db(bool $once = false, string $connectionName = null, bool $noCleanup = false): bool {
         try {
             $manager = new \Webula\SmallBackup\Classes\DbBackupManager;
             if (!$noCleanup) {
                 $manager->clear();
             }
-            $manager->backup($connectionName);
+            $manager->backup($connectionName, $once);
         } catch (\Exception $ex) {
             \Log::error($ex->getMessage());
             return false;
@@ -16,13 +16,13 @@ if (!function_exists('wsb_backup_db')) {
 }
 
 if (!function_exists('wsb_backup_theme')) {
-    function wsb_backup_theme(string $themeName = null, bool $noCleanup = false): bool {
+    function wsb_backup_theme(bool $once = false, string $themeName = null, bool $noCleanup = false): bool {
         try {
             $manager = new \Webula\SmallBackup\Classes\ThemeBackupManager;
             if (!$noCleanup) {
                 $manager->clear();
             }
-            $manager->backup($themeName);
+            $manager->backup($themeName, $once);
         } catch (\Exception $ex) {
             \Log::error($ex->getMessage());
             return false;

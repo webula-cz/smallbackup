@@ -18,7 +18,7 @@ return [
         ],
         'flash' => [
             'expired_deleted' => 'Úspěšně bylo smazáno :deleted expirovaných záloh.',
-            'successfull_backup' => 'Záloha byla úspěšně vytvořena do souboru :file.',
+            'successfull_backup' => 'Záloha je vytvořena v souboru :file.',
 
             'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny do souborů :files.',
 

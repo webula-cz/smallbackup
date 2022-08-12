@@ -18,7 +18,7 @@ return [
         ],
         'flash' => [
             'expired_deleted' => ':deleted expired backups were successfully deleted.',
-            'successfull_backup' => 'Backup was successfully made into file :file.',
+            'successfull_backup' => 'Backup is made in file :file.',
 
             'cleanup_and_backup' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
 

@@ -15,12 +15,12 @@ V nastavení lze zapnout automatický režim, ve kterém je naplánována úloha
 V backendu je v nastavení tohoto pluginu tlačítko pro okamžité provedení zálohy.
 
 ### Console command
-Příkaz pro zálohu databáze je `php artisan smallbackup:db [connectionName] [--no-cleanup]` (connectionName je název připojení v config/database.php; vynechat = defaultní)
+Příkaz pro zálohu databáze je `php artisan smallbackup:db [connectionName] [--no-cleanup] [--once]` (connectionName je název připojení v config/database.php; vynechat = defaultní)
 
-Příkaz pro zálohu tématu vzhledu: `php artisan smallbackup:theme [themeName] [--no-cleanup]` (themeName je složka tématu v themes/; vynechat = aktivní téma)
+Příkaz pro zálohu tématu vzhledu: `php artisan smallbackup:theme [themeName] [--no-cleanup] [--once]` (themeName je složka tématu v themes/; vynechat = aktivní téma)
 
 ### Artisan stránka
-Na artisan/schedule CMS stránce lze použít helpery. Chyby zapisují automaticky do error logu.
+Na artisan/schedule CMS stránce lze použít helpery. Chyby zapisují automaticky do error logu. Helper lze nastavit tak, aby zálohu provedl pouze jednou za den.
 
 ```title = "artisan"
 url = "/artisan/schedule"
