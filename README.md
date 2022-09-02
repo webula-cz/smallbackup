@@ -1,37 +1,91 @@
-# smallbackup-plugin
-Plugin má za úkol jednoduše zazálohovat databázi a složku s tématem vzhledu, uchovat tuto zálohu po určený počet dní a umožnit její snadné stáhnutí v backendu October CMS.
+# Small Backup
+> Simple backup for database (MySQL, SQLite) and active theme
 
-Defaultní místo pro zálohy je složka `storage/app/uploads/protected/backup` a interval ponechání zálohy 7 dní.
 
-Zálohování je možné vyvolat automaticky nebo ručně, dle nastavení v backendu OctoberCMS. Manuální řešení poskytuje použití příkazu nebo helperů (viz níže).
+## Installation
 
-## Automatické zálohování
-### Scheduler
-V nastavení lze zapnout automatický režim, ve kterém je naplánována úloha zálohování 1x denně při spouštění cronem - viz [dokumentace October CMS](https://docs.octobercms.com/1.x/setup/installation.html#review-configuration).
+**GitHub** clone into `/plugins` dir:
 
-## Manuální zálohování
+```sh
+git clone https://github.com/webula/smallbackup
+```
 
-### Backend settings
-V backendu je v nastavení tohoto pluginu tlačítko pro okamžité provedení zálohy.
+**OctoberCMS backend (OC1)**
 
-### Console command
-Příkaz pro zálohu databáze je `php artisan smallbackup:db [connectionName] [--no-cleanup] [--once]` (connectionName je název připojení v config/database.php; vynechat = defaultní)
+Just look for 'Small Backup' in search field in:
+> Settings > Updates & Plugins > Install plugins
 
-Příkaz pro zálohu tématu vzhledu: `php artisan smallbackup:theme [themeName] [--no-cleanup] [--once]` (themeName je složka tématu v themes/; vynechat = aktivní téma)
+### Permissions
 
-### Artisan stránka
-Na artisan/schedule CMS stránce lze použít helpery. Chyby zapisují automaticky do error logu. Helper lze nastavit tak, aby zálohu provedl pouze jednou za den.
+> Settings > Administrators
 
-```title = "artisan"
+You can set permissions to restrict access in *Settings > Small plugins > Small Backup*.
+
+
+### Installation with composer
+
+* Edit composer.json by adding new repository
+```
+"repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/webula/smallbackup"
+    }
+]
+```
+* run in command line
+```sh
+composer require webula/smallbackup
+```
+
+
+## Settings
+
+* Default backups folder `storage/app/uploads/protected/backup` 
+* Default cleanup interval `7 days`
+
+You can download created backups from plugin Settings tabs Database and Theme or you can get it directly from backup folder (eg. with FTP).
+
+
+## How to make backups
+
+### Automatic backup (with scheduler)
+
+>Must be allowed in plugin's Settings!
+
+There are default scheduler jobs for database and active theme to be backed up once a day.
+
+[See October CMS docs](https://docs.octobercms.com/1.x/setup/installation.html#review-configuration) about scheduling jobs.
+
+### Automatic backup (without scheduler)
+
+If you cannot run Cron command directly on your server/hosting, you can create custom CMS page like this:
+
+```
+title = "artisan"
 url = "/artisan/schedule"
 is_hidden = 0
 ==
 <?php
     function onStart()
     {
-        wsb_backup_db();
-        wsb_backup_theme();
+        wsb_backup_db($once = false, $connectionName = null,$noCleanup = false);
+        wsb_backup_theme($once = false, $themeName = null, $noCleanup = false);
     }
 ?>
 ==
 ```
+
+
+### Manual backup
+
+You can create manual backup in plugin's Settings by clicking button `Backup now` on Database or Theme tab.
+
+#### Console commands
+
+There are console commands ready:
+
+* `php artisan smallbackup:db [connectionName] [--no-cleanup] [--once]` (connectionName is optional and respect config/database.php settings)
+
+* `php artisan smallbackup:theme [themeName] [--no-cleanup] [--once]` (themeName is optional and can be any folder name in themes/)
+

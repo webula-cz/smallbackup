@@ -93,6 +93,48 @@ class Settings extends SystemSettings
     }
 
     /**
+     * onBackup event
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_onBackupDb()
+    {
+        try {
+            $manager = new DbBackupManager;
+            $deleted = $manager->clear();
+            $files[] = $manager->backup();
+
+            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            return \Backend::redirect('webula/smallbackup/settings/update');
+        } 
+        catch (Exception $ex) 
+        {
+            Flash::error($ex->getMessage());
+        }
+    }
+
+    /**
+     * onBackup event
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_onBackupTheme()
+    {
+        try {
+            $manager = new ThemeBackupManager;
+            $deleted = $manager->clear();
+            $files[] = $manager->backup();
+
+            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            return \Backend::redirect('webula/smallbackup/settings/update');
+        } 
+        catch (Exception $ex) 
+        {
+            Flash::error($ex->getMessage());
+        }
+    }
+
+    /**
      * Get settings segment from URI
      *
      * @return array

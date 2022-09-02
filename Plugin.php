@@ -51,7 +51,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Registers any back-end setting used by this plugin.
+     * Register any back-end setting used by this plugin.
      *
      * @return array
      */

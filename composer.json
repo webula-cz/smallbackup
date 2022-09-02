@@ -1,6 +1,6 @@
 {
     "name": "webula/smallbackup-plugin",
-    "description": "Backup and backup management of databases",
+    "description": "Backup databases and theme",
     "homepage": "https://www.webula.cz",
     "type": "october-plugin",
     "authors": [

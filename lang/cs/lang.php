@@ -2,18 +2,18 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Zálohování a správa zálohování databází',
+        'description' => 'Zálohování databází a šablon',
     ],
 
     'backup' => [
         'list' => [
-            'db' => 'Databáze',
-            'theme' => 'Témata vzhledu',
+            'db' => 'Zálohy databáze',
+            'theme' => 'Zálohy témat',
             'filename' => 'Soubor zálohy',
             'created_at' => 'Vytvořen',
         ],
         'control' => [
-            'download' => 'stáhnout',
+            'download' => 'Stáhnout',
             'backup_now' => 'Ihned zazálohovat',
         ],
         'flash' => [
@@ -32,7 +32,14 @@ return [
     ],
 
     'settings' => [
+        'tabs' => [
+            'database' => 'Databáze',
+            'theme' => 'Šablona',
+            'backups' => 'Zálohy',
+        ],
+
         'backup_folder' => 'Adresář pro umístění záloh',
+        'backup_folder_comment' => 'Nechte prázdné pro výchozí adresář.',
         'cleanup_interval' => 'Interval ponechání starých záloh (dní)',
         'db_use_compression' => 'Použít ZIP kompresi',
 

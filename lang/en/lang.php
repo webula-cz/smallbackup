@@ -2,18 +2,18 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Backup and backup management of databases',
+        'description' => 'Backup databases and themes',
     ],
 
     'backup' => [
         'list' => [
-            'db' => 'Database',
-            'theme' => 'Themes',
+            'db' => 'Database backup files',
+            'theme' => 'Themes backup files',
             'filename' => 'Backup file',
             'created_at' => 'Created',
         ],
         'control' => [
-            'download' => 'download',
+            'download' => 'Download',
             'backup_now' => 'Backup now',
         ],
         'flash' => [
@@ -32,7 +32,14 @@ return [
     ],
 
     'settings' => [
+        'tabs' => [
+            'database' => 'Database',
+            'theme' => 'Theme',
+            'backups' => 'Backups',
+        ],
+
         'backup_folder' => 'Backup folder',
+        'backup_folder_comment' => 'Leave empty for default folder.',
         'cleanup_interval' => 'Cleanup interval (in days)',
         'db_use_compression' => 'Use ZIP compression',
 
