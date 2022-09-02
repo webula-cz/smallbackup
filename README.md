@@ -89,3 +89,14 @@ There are console commands ready:
 
 * `php artisan smallbackup:theme [themeName] [--no-cleanup] [--once]` (themeName is optional and can be any folder name in themes/)
 
+
+----
+> Our thanks goes to:    
+> [OctoberCMS](http://www.octobercms.com) team members and supporters for this great system.   
+> [Brooke Cagle](https://unsplash.com/@benjaminlehman) for his photo.   
+> [Font Awesome](http://fontawesome.io/icons/) for nice icons.    
+
+Created by [Webula](https://www.webula.cz) in Czech Republic.
+
+
+
