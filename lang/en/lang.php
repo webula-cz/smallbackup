@@ -20,7 +20,7 @@ return [
             'expired_deleted' => ':deleted expired backups were successfully deleted.',
             'successfull_backup' => 'Backup is made in file :file.',
 
-            'cleanup_and_backup' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
+            'backup_all' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
 
             'unknown_database_driver' => 'Unknown database driver :driver! This driver is not implemented yet. Please send PR.',
             'unknown_theme' => 'Unknown theme! Cannot find theme with code name :theme.',
