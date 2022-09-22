@@ -7,7 +7,7 @@
 **GitHub** clone into `/plugins` dir:
 
 ```sh
-git clone https://github.com/webula/smallbackup
+git clone https://github.com/webula-cz/smallbackup
 ```
 
 **OctoberCMS backend (OC1)**
@@ -29,7 +29,7 @@ You can set permissions to restrict access in *Settings > Small plugins > Small 
 "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/webula/smallbackup"
+      "url": "https://github.com/webula-cz/smallbackup"
     }
 ]
 ```
