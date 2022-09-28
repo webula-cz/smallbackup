@@ -19,12 +19,12 @@ class Mysql implements Contracts\BackupStream
     protected $excludedTables = [];
 
 
-    public function __construct(Connection $connection, array $excludedTables = [])
+    public function __construct(Connection $connection, array $excludedTables = [], array $customMapping = [])
     {
         $this->connection = $connection;
         $this->excludedTables = $excludedTables;
 
-        $this->syncPlatformMapping();
+        $this->syncPlatformMapping($customMapping);
     }
 
     /**
@@ -284,9 +284,10 @@ class Mysql implements Contracts\BackupStream
     /**
      * Sync doctrine platform mapping
      *
+     * @param array $customMapping [original_type => backup_type]
      * @return void
      */
-    protected function syncPlatformMapping(): void
+    protected function syncPlatformMapping(array $customMapping = []): void
     {
         $platform = $this->connection->getDoctrineSchemaManager()->getDatabasePlatform();
         if (!$platform->hasDoctrineTypeMappingFor('json')) {
@@ -294,6 +295,11 @@ class Mysql implements Contracts\BackupStream
         }
         if (!$platform->hasDoctrineTypeMappingFor('enum')) {
             $platform->registerDoctrineTypeMapping('enum', \Doctrine\DBAL\Types\Type::STRING);
+        }
+        if (!empty($customMapping)) {
+            foreach ($customMapping as $db_type => $doctrine_type) {
+                $platform->registerDoctrineTypeMapping($db_type, $doctrine_type);
+            }
         }
     }
 

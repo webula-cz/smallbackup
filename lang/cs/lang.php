@@ -48,6 +48,14 @@ return [
 
         'db_excluded_tables' => 'Tabulky vyjmuté ze zálohování',
         'db_excluded_tables__comment' => 'Jen pro případ MySQL databází. SQLite se zálohuje celosouborově.',
+        'db_custom_mapping__prompt' => 'Přidat nový typ',
+
+        'db_custom_mapping' => 'Mapování typů sloupců pro MySQL Doctrine',
+        'db_custom_mapping__comment' => 'Registruje Doctrine typ sloupce, který se má použít ve spojení s typem sloupce této platformy.',
+        'db_custom_mapping__db_type' => 'Databázový typ',
+        'db_custom_mapping__db_type__comment' => 'např. json',
+        'db_custom_mapping__doctrine_type' => 'Doctrine typ',
+        'db_custom_mapping__doctrine_type__comment' => 'např. text',
 
         'theme_auto' => 'Zapnout automatický režim zálohování aktuálního tématu',
         'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',

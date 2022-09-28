@@ -46,6 +46,26 @@ tabs:
             type: switch
             tab: webula.smallbackup::lang.settings.tabs.database
 
+        db_custom_mapping:
+            label: webula.smallbackup::lang.settings.db_custom_mapping
+            comment: webula.smallbackup::lang.settings.db_custom_mapping__comment
+            type: repeater
+            prompt: webula.smallbackup::lang.settings.db_custom_mapping__prompt
+            form:
+                fields:
+                    db_type:
+                        label: webula.smallbackup::lang.settings.db_custom_mapping__db_type
+                        comment: webula.smallbackup::lang.settings.db_custom_mapping__db_type__comment
+                        type: text
+                        span: left
+                    doctrine_type:
+                        label: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type
+                        comment: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type__comment
+                        type: text
+                        span: right
+            span: right
+            tab: webula.smallbackup::lang.settings.tabs.database
+
         _listing_db:
             type: partial
             path: $/webula/smallbackup/controllers/settings/_listing-db.htm

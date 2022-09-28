@@ -34,7 +34,8 @@ class DbBackupManager extends BackupManager
             if (!$once || !File::exists($this->getUseCompression() ? $pathname . '.zip' : $pathname)) {
                 $stream = (new Drivers\Mysql(
                         Db::connection($connectionName),
-                        $this->getExcludedTables()
+                        $this->getExcludedTables(),
+                        $this->getCustomMapping()
                     ))->backupStream();
                 File::put(
                     $pathname,
@@ -89,5 +90,15 @@ class DbBackupManager extends BackupManager
     protected function getUseCompression(): bool
     {
         return boolval(Settings::get('db_use_compression'));
+    }
+
+    /**
+     * Get custom columns mapping for db backup
+     *
+     * @return array
+     */
+    protected function getCustomMapping(): array
+    {
+        return array_pluck((array)Settings::get('db_custom_mapping'), 'doctrine_type', 'db_type');
     }
 }
