@@ -2,3 +2,5 @@
 1.0.2: Fixed flash message content
 1.1.0:
   - Fixed missing DB type mapping
+1.1.1:
+  - Updated DB type mapping
