@@ -36,6 +36,7 @@ return [
             'database' => 'Databáze',
             'theme' => 'Šablona',
             'backups' => 'Zálohy',
+            'settings' => 'Nastavení',
         ],
 
         'backup_folder' => 'Adresář pro umístění záloh',
@@ -51,7 +52,7 @@ return [
         'db_custom_mapping__prompt' => 'Přidat nový typ',
 
         'db_custom_mapping' => 'Mapování typů sloupců pro MySQL Doctrine',
-        'db_custom_mapping__comment' => 'Registruje Doctrine typ sloupce, který se má použít ve spojení s typem sloupce této platformy.',
+        'db_custom_mapping__comment' => 'Typ sloupce, který má být použitý místo originálního při exportu databáze (např. JSON exportovat jako TEXT).',
         'db_custom_mapping__db_type' => 'Databázový typ',
         'db_custom_mapping__db_type__comment' => 'např. json',
         'db_custom_mapping__doctrine_type' => 'Doctrine typ',

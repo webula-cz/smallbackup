@@ -46,6 +46,22 @@ tabs:
             type: switch
             tab: webula.smallbackup::lang.settings.tabs.database
 
+        _listing_db:
+            type: partial
+            path: $/webula/smallbackup/controllers/settings/_listing-db.htm
+            tab: webula.smallbackup::lang.settings.tabs.database
+
+        theme_auto:
+            label: webula.smallbackup::lang.settings.theme_auto
+            comment: webula.smallbackup::lang.settings.theme_auto__comment
+            type: switch
+            tab: webula.smallbackup::lang.settings.tabs.theme
+
+        _listing_theme:
+            type: partial
+            path: $/webula/smallbackup/controllers/settings/_listing-theme.htm
+            tab: webula.smallbackup::lang.settings.tabs.theme
+
         db_custom_mapping:
             label: webula.smallbackup::lang.settings.db_custom_mapping
             comment: webula.smallbackup::lang.settings.db_custom_mapping__comment
@@ -63,21 +79,5 @@ tabs:
                         comment: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type__comment
                         type: text
                         span: right
-            span: right
-            tab: webula.smallbackup::lang.settings.tabs.database
-
-        _listing_db:
-            type: partial
-            path: $/webula/smallbackup/controllers/settings/_listing-db.htm
-            tab: webula.smallbackup::lang.settings.tabs.database
-
-        theme_auto:
-            label: webula.smallbackup::lang.settings.theme_auto
-            comment: webula.smallbackup::lang.settings.theme_auto__comment
-            type: switch
-            tab: webula.smallbackup::lang.settings.tabs.theme
-
-        _listing_theme:
-            type: partial
-            path: $/webula/smallbackup/controllers/settings/_listing-theme.htm
-            tab: webula.smallbackup::lang.settings.tabs.theme
+            span: full
+            tab: webula.smallbackup::lang.settings.tabs.settings
