@@ -1,7 +1,6 @@
 <?php namespace Webula\SmallBackup\Classes\Drivers;
 
 use Illuminate\Database\Connection;
-use Webula\SmallBackup\Models\Settings;
 
 class Mysql implements Contracts\BackupStream
 {
@@ -25,13 +24,7 @@ class Mysql implements Contracts\BackupStream
         $this->connection = $connection;
         $this->excludedTables = $excludedTables;
 
-        /**
-         * Override missing json type if needed
-         */
-        if( Settings::get('doctrine_maping', null) )
-        {
-            \DB::getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('json', 'text');
-        }
+        $this->syncPlatformMapping();
     }
 
     /**
@@ -285,6 +278,23 @@ class Mysql implements Contracts\BackupStream
     protected function getCharset(): string
     {
         return $this->connection->getConfig('charset');
+    }
+
+
+    /**
+     * Sync doctrine platform mapping
+     *
+     * @return void
+     */
+    protected function syncPlatformMapping(): void
+    {
+        $platform = $this->connection->getDoctrineSchemaManager()->getDatabasePlatform();
+        if (!$platform->hasDoctrineTypeMappingFor('json')) {
+            $platform->registerDoctrineTypeMapping('json', \Doctrine\DBAL\Types\Type::TEXT);
+        }
+        if (!$platform->hasDoctrineTypeMappingFor('enum')) {
+            $platform->registerDoctrineTypeMapping('enum', \Doctrine\DBAL\Types\Type::STRING);
+        }
     }
 
 

@@ -61,10 +61,3 @@ tabs:
             type: partial
             path: $/webula/smallbackup/controllers/settings/_listing-theme.htm
             tab: webula.smallbackup::lang.settings.tabs.theme
-
-        doctrine_maping:
-            label: webula.smallbackup::lang.settings.doctrine_maping
-            comment: webula.smallbackup::lang.settings.doctrine_maping_comment
-            type: checkbox
-            span: left
-            tab: webula.smallbackup::lang.settings.tabs.settings

@@ -36,7 +36,6 @@ return [
             'database' => 'Databáze',
             'theme' => 'Šablona',
             'backups' => 'Zálohy',
-            'settings' => 'Nastavení',
         ],
 
         'backup_folder' => 'Adresář pro umístění záloh',
@@ -56,8 +55,5 @@ return [
         'section_db' => 'Databáze',
         'section_theme' => 'Téma vzhledu',
         'section_listing' => 'Výpis záloh',
-
-        'doctrine_maping' => 'Přepsat mapování typů sloupců DB',
-        'doctrine_maping_comment' => 'Pokud při zálohování databáze dostáváte chybu s nepodporovaným typem, povolením této volby budou přemapovány. Podporovaná mapování jsou: [json => text].',
     ],
 ];

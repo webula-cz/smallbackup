@@ -36,7 +36,6 @@ return [
             'database' => 'Database',
             'theme' => 'Theme',
             'backups' => 'Backups',
-            'settings' => 'Settings',
         ],
 
         'backup_folder' => 'Backup folder',
@@ -56,8 +55,5 @@ return [
         'section_db' => 'Database',
         'section_theme' => 'Theme',
         'section_listing' => 'List of backups',
-
-        'doctrine_maping' => 'Override DB columns type mapping',
-        'doctrine_maping_comment' => 'If you receive DB backup error with unsupported type message, enable this to override type mapping. Supported mappings are: [json => text].',
     ],
 ];
