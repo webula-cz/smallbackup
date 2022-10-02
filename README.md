@@ -35,13 +35,13 @@ You can set permissions to restrict access in *Settings > Small plugins > Small 
 ```
 * run in command line
 ```sh
-composer require webula/smallbackup
+composer require webula/smallbackup-plugin
 ```
 
 
 ## Settings
 
-* Default backups folder `storage/app/uploads/protected/backup` 
+* Default backups folder `storage/app/uploads/protected/backup`
 * Default cleanup interval `7 days`
 
 You can download created backups from plugin Settings tabs Database and Theme or you can get it directly from backup folder (eg. with FTP).
@@ -91,12 +91,9 @@ There are console commands ready:
 
 
 ----
-> Our thanks goes to:    
-> [OctoberCMS](http://www.octobercms.com) team members and supporters for this great system.   
-> [Brooke Cagle](https://unsplash.com/@benjaminlehman) for his photo.   
-> [Font Awesome](http://fontawesome.io/icons/) for nice icons.    
+> Our thanks goes to:
+> [OctoberCMS](http://www.octobercms.com) team members and supporters for this great system.
+> [Brooke Cagle](https://unsplash.com/@benjaminlehman) for his photo.
+> [Font Awesome](http://fontawesome.io/icons/) for nice icons.
 
 Created by [Webula](https://www.webula.cz) in Czech Republic.
-
-
-
