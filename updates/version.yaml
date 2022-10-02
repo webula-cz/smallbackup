@@ -4,3 +4,5 @@
   - Fixed missing DB type mapping
 1.1.1:
   - Updated DB type mapping
+1.1.2:
+  - Fix composer command in readme
