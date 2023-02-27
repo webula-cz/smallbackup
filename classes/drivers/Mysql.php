@@ -40,7 +40,9 @@ class Mysql implements Contracts\BackupStream
         ;
 
         $tables = collect($this->getListOfTables())
-            ->map(fn ($item) => $item->getName())
+            ->map(function ($item) {
+                return $item->getName();
+            })
             ->diff($this->excludedTables)
             ->toArray();
 
@@ -55,7 +57,9 @@ class Mysql implements Contracts\BackupStream
         }
 
         $views = collect($this->getListOfViews())
-            ->map(fn ($item) => $item->getName())
+            ->map(function ($item) {
+                return $item->getName();
+            })
             ->diff($this->excludedTables)
             ->toArray();
 
@@ -150,7 +154,9 @@ class Mysql implements Contracts\BackupStream
                 if ($chunk->first() != $row) {
                     $output .= ',';
                 }
-                $row = collect($row)->map(fn ($value) => $this->quote($value));
+                $row = collect($row)->map(function ($value) {
+                    return $this->quote($value);
+                });
                 $output .= PHP_EOL . "(" . $row->implode(', ') . ")";
             }
             $output .= ";" . PHP_EOL;
@@ -266,7 +272,9 @@ class Mysql implements Contracts\BackupStream
     protected function getListOfColumns(string $table): array
     {
         return collect($this->connection->getDoctrineSchemaManager()->listTableColumns($table))
-            ->map(fn ($item) => $item->getName())
+            ->map(function ($item) {
+                return $item->getName();
+            })
             ->toArray();
     }
 

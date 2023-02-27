@@ -75,8 +75,12 @@ abstract class BackupManager
     public function list(): array
     {
         return collect(File::files($this->folder))
-            ->filter(fn ($file) => Str::startsWith($file->getFilename(), $this->prefix))
-            ->sortBy(fn ($file) => $file->getCTime())
+            ->filter(function ($file) {
+                return Str::startsWith($file->getFilename(), $this->prefix);
+            })
+            ->sortBy(function ($file) {
+                return $file->getCTime();
+            })
             ->toArray();
     }
 
