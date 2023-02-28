@@ -53,9 +53,10 @@ return [
 
         'db_excluded_tables' => 'Tabulky vyjmuté ze zálohování',
         'db_excluded_tables__comment' => 'Jen pro případ MySQL databází. SQLite se zálohuje celosouborově.',
-        'db_custom_mapping__prompt' => 'Přidat nový typ',
+
 
         'db_custom_mapping' => 'Mapování typů sloupců pro MySQL Doctrine',
+        'db_custom_mapping__prompt' => 'Přidat nový typ',
         'db_custom_mapping__comment' => 'Typ sloupce, který má být použitý místo originálního při exportu databáze (např. JSON exportovat jako TEXT).',
         'db_custom_mapping__db_type' => 'Databázový typ',
         'db_custom_mapping__db_type__comment' => 'např. json',

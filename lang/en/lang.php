@@ -9,6 +9,7 @@ return [
         'list' => [
             'db' => 'Database backup files',
             'theme' => 'Themes backup files',
+            'storage' => 'Storage backup files',
             'filename' => 'Backup file',
             'created_at' => 'Created',
         ],
@@ -22,8 +23,11 @@ return [
 
             'backup_all' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
 
+            'nothing_to_backup' => 'Nothing to backup.',
             'unknown_database_driver' => 'Unknown database driver :driver! This driver is not implemented yet. Please send PR.',
             'unknown_theme' => 'Unknown theme! Cannot find theme with code name :theme.',
+            'unknown_resource' => 'Unknown storage resource! Cannot find storage resource :resource.',
+            'empty_resource' => 'This resource is empty, nothing to backup!',
         ],
     ],
 
@@ -35,6 +39,7 @@ return [
         'tabs' => [
             'database' => 'Database',
             'theme' => 'Theme',
+            'storage' => 'Storage',
             'settings' => 'Settings',
         ],
 
@@ -50,6 +55,7 @@ return [
         'db_excluded_tables__comment' => 'Only for MySQL. SQLite is backed up as one file.',
 
         'db_custom_mapping' => 'Custom MySQL database Doctrine mapping',
+        'db_custom_mapping__prompt' => 'Add new type',
         'db_custom_mapping__comment' => 'Database column type to be used instead of the original one when exporting database (eg. JSON to be exported as TEXT).',
         'db_custom_mapping__db_type' => 'Current database type',
         'db_custom_mapping__db_type__comment' => 'e.g. json',
@@ -58,6 +64,11 @@ return [
 
         'theme_auto' => 'Switch on auto theme backup',
         'theme_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
+
+        'storage_auto' => 'Switch on auto storage backup',
+        'storage_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
+
+        'storage_excluded_resources' => 'Storage folders removed from backup',
 
     ],
 ];
