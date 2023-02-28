@@ -1,0 +1,13 @@
+<div class="form-preview m-t-md">
+    <h3 class="m-t-0"><?= e(trans('webula.smallbackup::lang.backup.list.storage')) ?></h3>
+
+    <div class="m-t">
+        <?= $this->makePartial('list', ['files' => $this->getStorageBackupList()]) ?>
+    </div>
+
+    <div>
+        <button type="button" class="m-t btn btn-secondary" data-request="onBackupStorage">
+            <?= e(trans('webula.smallbackup::lang.backup.control.backup_now')) ?>
+        </button>
+    </div>
+</div>

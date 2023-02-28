@@ -1,12 +1,12 @@
 <?php namespace Webula\SmallBackup\Console;
 
 use Exception;
-use Illuminate\Console\Command;
+use Webula\SmallBackup\Classes\Console\BackupCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Webula\SmallBackup\Classes\ThemeBackupManager;
 
-class BackupTheme extends Command
+class BackupTheme extends BackupCommand
 {
     /**
      * @var string The console command name.
@@ -25,17 +25,8 @@ class BackupTheme extends Command
     public function handle()
     {
         $manager = new ThemeBackupManager();
-        if (!$this->option('no-cleanup')) {
-            try {
-                $this->output->write('Cleanup...');
-                $deleted = $manager->clear();
-                $this->output->success(
-                    trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted])
-                );
-            } catch (Exception $ex) {
-                $this->output->error("Cleanup failed! " . $ex->getMessage());
-            }
-        }
+
+        $this->cleanup($manager);
 
         try {
             $this->output->write('Backup...');
@@ -59,18 +50,6 @@ class BackupTheme extends Command
     {
         return [
             ['name', InputArgument::OPTIONAL, 'Another theme name.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['once', null, InputOption::VALUE_NONE, 'Do not overwrite existing backup file.', null],
-            ['no-cleanup', 'nocleanup', InputOption::VALUE_NONE, 'Do not clean up old backups.', null],
         ];
     }
 }

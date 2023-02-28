@@ -18,13 +18,13 @@ class DbBackupManager extends BackupManager
     /**
      * Backup DB by connection name (null = default)
      *
-     * @param string|null $source connection name
+     * @param string|null $resource connection name
      * @param bool $once do not overwrite existing backup file
      * @return string file with current backup
      */
-    public function backup(string $source = null, bool $once = false): string
+    public function backup(string $resource = null, bool $once = false): string
     {
-        $connectionName = $source ?: config('database.default');
+        $connectionName = $resource ?: config('database.default');
         $connectionDriver = config('database.connections.' . $connectionName . '.driver');
 
         if ($connectionDriver == 'mysql') {

@@ -30,3 +30,19 @@ if (!function_exists('wsb_backup_theme')) {
         return true;
     }
 }
+
+if (!function_exists('wsb_backup_storage')) {
+    function wsb_backup_storage(bool $once = false, string $cmsStorage = null, bool $noCleanup = false): bool {
+        try {
+            $manager = new \Webula\SmallBackup\Classes\StorageBackupManager;
+            if (!$noCleanup) {
+                $manager->clear();
+            }
+            $manager->backup($cmsStorage, $once);
+        } catch (\Exception $ex) {
+            \Log::error($ex->getMessage());
+            return false;
+        }
+        return true;
+    }
+}

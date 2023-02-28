@@ -17,13 +17,13 @@ class ThemeBackupManager extends BackupManager
     /**
      * Backup Theme(s) by connection name (null = default)
      *
-     * @param string|null $themeName
+     * @param string|null $resource
      * @param bool $once do not overwrite existing backup file
      * @return string backup file
      */
-    public function backup(string $themeName = null, bool $once = false): string
+    public function backup(string $resource = null, bool $once = false): string
     {
-        $themeName = $themeName ?: Theme::getActiveThemeCode();
+        $themeName = $resource ?: Theme::getActiveThemeCode();
 
         if ($themeName && File::isDirectory(themes_path($themeName))) {
             $filename = $this->prefix . str_slug($themeName) . '-' . now()->format('Y-m-d') . '.zip';

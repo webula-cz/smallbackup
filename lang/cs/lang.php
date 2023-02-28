@@ -9,6 +9,7 @@ return [
         'list' => [
             'db' => 'Zálohy databáze',
             'theme' => 'Zálohy témat',
+            'storage' => 'Zálohy úložiště',
             'filename' => 'Soubor zálohy',
             'created_at' => 'Vytvořen',
         ],
@@ -22,8 +23,11 @@ return [
 
             'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny do souborů :files.',
 
+            'nothing_to_backup' => 'Nebylo co zálohovat, záloha nevznikla.',
             'unknown_database_driver' => 'Neznámý databázový ovladač :driver! Tento ovladač nebyl ještě implementován. Prosíme zašlete nám své PR.',
             'unknown_theme' => 'Neznámé téma! Téma s kódovým názvem :theme nebylo nalezeno.',
+            'unknown_resource' => 'Neznámý zdroj dat! Zdroj dat úložiště s názvem :resource nebyl nalezen.',
+            'empty_resource' => 'Požadovaný zdroj dat úložiště je prázdný, není co zálohovat!',
         ],
     ],
 
@@ -35,7 +39,7 @@ return [
         'tabs' => [
             'database' => 'Databáze',
             'theme' => 'Šablona',
-            'backups' => 'Zálohy',
+            'storage' => 'Úložiště',
             'settings' => 'Nastavení',
         ],
 
@@ -61,8 +65,10 @@ return [
         'theme_auto' => 'Zapnout automatický režim zálohování aktuálního tématu',
         'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
 
-        'section_db' => 'Databáze',
-        'section_theme' => 'Téma vzhledu',
-        'section_listing' => 'Výpis záloh',
+        'storage_auto' => 'Zapnout automatický režim zálohování úložiště',
+        'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
+
+        'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
+
     ],
 ];

@@ -7,8 +7,8 @@ fields:
     backup_folder:
         label: webula.smallbackup::lang.settings.backup_folder
         comment: webula.smallbackup::lang.settings.backup_folder_comment
-        placeholder: 'storage/app/uploads/protected/backup'
-        default: 'app/uploads/protected/backup'
+        placeholder: storage/app/backup
+        default: storage/app/backup
         span: left
         type: text
 
@@ -22,6 +22,12 @@ fields:
         default: 7
 
 tabs:
+    icons:
+        webula.smallbackup::lang.settings.tabs.database: icon-database
+        webula.smallbackup::lang.settings.tabs.theme: icon-picture-o
+        webula.smallbackup::lang.settings.tabs.storage: icon-files-o
+        webula.smallbackup::lang.settings.tabs.settings: icon-cogs
+
     fields:
 
         db_auto:
@@ -61,6 +67,26 @@ tabs:
             type: partial
             path: $/webula/smallbackup/controllers/settings/_listing-theme.htm
             tab: webula.smallbackup::lang.settings.tabs.theme
+
+        storage_auto:
+            label: webula.smallbackup::lang.settings.storage_auto
+            comment: webula.smallbackup::lang.settings.storage_auto__comment
+            type: switch
+            span: left
+            tab: webula.smallbackup::lang.settings.tabs.storage
+
+        storage_excluded_resources:
+            label: webula.smallbackup::lang.settings.storage_excluded_resources
+            span: right
+            type: taglist
+            options: getExcludedResourcesOptions
+            customTags: false
+            tab: webula.smallbackup::lang.settings.tabs.storage
+
+        _listing_storage:
+            type: partial
+            path: $/webula/smallbackup/controllers/settings/_listing-storage.htm
+            tab: webula.smallbackup::lang.settings.tabs.storage
 
         db_custom_mapping:
             label: webula.smallbackup::lang.settings.db_custom_mapping

@@ -1,5 +1,5 @@
 # Small Backup
-> Simple backup for database (MySQL, SQLite) and active theme
+> Simple backup for database (MySQL, SQLite), active theme and CMS storages
 
 
 ## Installation
@@ -41,10 +41,12 @@ composer require webula/smallbackup-plugin
 
 ## Settings
 
-* Default backups folder `storage/app/uploads/protected/backup`
+* Default backups folder `storage/app/backup`
 * Default cleanup interval `7 days`
 
-You can download created backups from plugin Settings tabs Database and Theme or you can get it directly from backup folder (eg. with FTP).
+You can download created backups from plugin Settings tabs Database, Theme and Storage or you can get it directly from backup folder (eg. with FTP).
+
+It's recommended to put your backup folder into .htaccess' *Black listed folders*, e.g. `RewriteRule ^storage/app/backup/.* index.php [L,NC]`.
 
 
 ## How to make backups
@@ -71,6 +73,7 @@ is_hidden = 0
     {
         wsb_backup_db($once = false, $connectionName = null,$noCleanup = false);
         wsb_backup_theme($once = false, $themeName = null, $noCleanup = false);
+        wsb_backup_storage($once = false, $cmsStorage = null, $noCleanup = false);
     }
 ?>
 ==
@@ -88,6 +91,8 @@ There are console commands ready:
 * `php artisan smallbackup:db [connectionName] [--no-cleanup] [--once]` (connectionName is optional and respect config/database.php settings)
 
 * `php artisan smallbackup:theme [themeName] [--no-cleanup] [--once]` (themeName is optional and can be any folder name in themes/)
+
+* `php artisan smallbackup:storage [cmsStorage] [--no-cleanup] [--once]` (cmsStorage is optional and can be any storage registered in *cms.storage* config)
 
 
 ----

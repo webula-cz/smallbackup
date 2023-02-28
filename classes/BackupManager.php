@@ -38,11 +38,11 @@ abstract class BackupManager
     /**
      * Backup source and return his filename
      *
-     * @param string|null $source
+     * @param string|null $resource
      * @param bool $once do not overwrite existing backup file
-     * @return string file with current backup
+     * @return string|null file with current backup
      */
-    abstract public function backup(string $source = null, bool $once = false): string;
+    abstract public function backup(string $resource = null, bool $once = false): string;
 
     /**
      * Clear expired backups
@@ -91,7 +91,7 @@ abstract class BackupManager
      */
     protected function getBackupFolder(): string
     {
-        return strval(Settings::get('backup_folder', 'storage/app/uploads/protected/backup'));
+        return strval(Settings::get('backup_folder', 'storage/app/backup'));
     }
 
     /**

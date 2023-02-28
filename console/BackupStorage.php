@@ -4,19 +4,19 @@ use Exception;
 use Webula\SmallBackup\Classes\Console\BackupCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Webula\SmallBackup\Classes\DbBackupManager;
+use Webula\SmallBackup\Classes\StorageBackupManager;
 
-class BackupDb extends BackupCommand
+class BackupStorage extends BackupCommand
 {
     /**
      * @var string The console command name.
      */
-    protected $name = 'smallbackup:db';
+    protected $name = 'smallbackup:storage';
 
     /**
      * @var string The console command description.
      */
-    protected $description = 'Backup current or default database.';
+    protected $description = 'Backup current or default CMS storage resource.';
 
     /**
      * Execute the console command.
@@ -24,13 +24,14 @@ class BackupDb extends BackupCommand
      */
     public function handle()
     {
-        $manager = new DbBackupManager;
+        $manager = new StorageBackupManager();
 
         $this->cleanup($manager);
 
         try {
             $this->output->write('Backup...');
             $file = $manager->backup($this->argument('name'), boolval($this->option('once')));
+
             $this->output->success(
                 trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => $file])
             );
@@ -49,7 +50,7 @@ class BackupDb extends BackupCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::OPTIONAL, 'Another database connection name.'],
+            ['name', InputArgument::OPTIONAL, 'Another CMS storage resource name.'],
         ];
     }
 }

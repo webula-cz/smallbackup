@@ -33,6 +33,7 @@ class Plugin extends PluginBase
     {
         $this->registerConsoleCommand('smallbackup.db', Console\BackupDb::class);
         $this->registerConsoleCommand('smallbackup.theme', Console\BackupTheme::class);
+        $this->registerConsoleCommand('smallbackup.storage', Console\BackupStorage::class);
     }
 
     /**
@@ -47,6 +48,9 @@ class Plugin extends PluginBase
         }
         if (Models\Settings::get('theme_auto')) {
             $schedule->command('smallbackup:theme')->daily();
+        }
+        if (Models\Settings::get('storage_auto')) {
+            $schedule->command('smallbackup:storage')->daily();
         }
     }
 

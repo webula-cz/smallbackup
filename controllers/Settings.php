@@ -7,7 +7,7 @@ use Backend;
 use Exception;
 use Request, Response, Redirect;
 use System\Controllers\Settings as SystemSettings;
-use Webula\SmallBackup\Classes\{DbBackupManager, ThemeBackupManager};
+use Webula\SmallBackup\Classes\{DbBackupManager, ThemeBackupManager, StorageBackupManager};
 
 class Settings extends SystemSettings
 {
@@ -54,6 +54,16 @@ class Settings extends SystemSettings
     }
 
     /**
+     * List of storage backups
+     *
+     * @return array
+     */
+    public function getStorageBackupList(): array
+    {
+        return (new StorageBackupManager)->list();
+    }
+
+    /**
      * Response downloaded file
      *
      * @param string $pathname
@@ -84,6 +94,10 @@ class Settings extends SystemSettings
             $deleted += $manager->clear();
             $files[] = $manager->backup();
 
+            $manager = new StorageBackupManager;
+            $deleted += $manager->clear();
+            $files[] = $manager->backup();
+
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return Redirect::refresh();
 
@@ -93,7 +107,7 @@ class Settings extends SystemSettings
     }
 
     /**
-     * onBackup event
+     * onBackup database event
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -106,15 +120,15 @@ class Settings extends SystemSettings
 
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return \Backend::redirect('webula/smallbackup/settings/update');
-        } 
-        catch (Exception $ex) 
+        }
+        catch (Exception $ex)
         {
             Flash::error($ex->getMessage());
         }
     }
 
     /**
-     * onBackup event
+     * onBackup theme event
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -127,8 +141,29 @@ class Settings extends SystemSettings
 
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return \Backend::redirect('webula/smallbackup/settings/update');
-        } 
-        catch (Exception $ex) 
+        }
+        catch (Exception $ex)
+        {
+            Flash::error($ex->getMessage());
+        }
+    }
+
+    /**
+     * onBackup storage event
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_onBackupStorage()
+    {
+        try {
+            $manager = new StorageBackupManager;
+            $deleted = $manager->clear();
+            $files[] = $manager->backup();
+
+            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            return \Backend::redirect('webula/smallbackup/settings/update');
+        }
+        catch (Exception $ex)
         {
             Flash::error($ex->getMessage());
         }

@@ -1,6 +1,6 @@
 <?php namespace Webula\SmallBackup\Models;
 
-use Model;
+use Model, Db;
 
 class Settings extends Model
 {
@@ -17,7 +17,13 @@ class Settings extends Model
 
     public function getExcludedTablesOptions()
     {
-        return \Db::connection()->getDoctrineSchemaManager()->listTableNames();
+        return Db::connection()->getDoctrineSchemaManager()->listTableNames();
+    }
+
+
+    public function getExcludedResourcesOptions()
+    {
+        return array_pluck(config('cms.storage'), 'path');
     }
 
 }

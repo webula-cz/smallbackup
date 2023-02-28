@@ -35,7 +35,6 @@ return [
         'tabs' => [
             'database' => 'Database',
             'theme' => 'Theme',
-            'backups' => 'Backups',
             'settings' => 'Settings',
         ],
 
@@ -60,8 +59,5 @@ return [
         'theme_auto' => 'Switch on auto theme backup',
         'theme_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
 
-        'section_db' => 'Database',
-        'section_theme' => 'Theme',
-        'section_listing' => 'List of backups',
     ],
 ];
