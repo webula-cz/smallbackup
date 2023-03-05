@@ -23,7 +23,7 @@ class Settings extends Model
 
     public function getExcludedResourcesOptions()
     {
-        return array_pluck(config('cms.storage'), 'path');
+        return array_pluck(config('cms.storage', []), 'path');
     }
 
 }
