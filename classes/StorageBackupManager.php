@@ -30,7 +30,7 @@ class StorageBackupManager extends BackupManager
             }
             $folders[] = $path;
         } else {
-            $folders = array_diff(array_pluck(config('cms.storage'), 'path'), $this->getExcludedResources());
+            $folders = array_diff(array_pluck(config('cms.storage', []), 'path'), $this->getExcludedResources());
         }
 
         $folders = collect($folders)->map(function ($folder) {
