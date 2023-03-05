@@ -10,3 +10,5 @@
     - Modify code for PHP 7.2 support
 1.2.0:
     - 'New feature: Backup CMS storage'
+1.2.1:
+    - 'Fixed support for OC v3'

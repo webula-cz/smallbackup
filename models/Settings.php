@@ -15,15 +15,28 @@ class Settings extends Model
     public $settingsFields = 'fields.yaml';
 
 
-    public function getExcludedTablesOptions()
+    public function getTablesOptions()
     {
         return Db::connection()->getDoctrineSchemaManager()->listTableNames();
     }
 
 
-    public function getExcludedResourcesOptions()
+    public function getResourcesOptions()
     {
-        return array_pluck(config('cms.storage'), 'path');
+        // OCMSv1
+
+        $resources = collect(config('cms.storage'))->where('disk', 'local')->map(function ($item) {
+            return str_after(array_get($item, 'path'), base_path());
+        })->toArray();
+
+        // OCMSv3
+        if (empty($resources)) {
+            $resources = collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
+                return str_after(array_get($item, 'root'), base_path());
+            })->toArray();
+        }
+
+        return $resources;
     }
 
 }

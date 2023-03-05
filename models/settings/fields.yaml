@@ -42,7 +42,7 @@ tabs:
             comment: webula.smallbackup::lang.settings.db_excluded_tables__comment
             span: right
             type: taglist
-            options: getExcludedTablesOptions
+            options: getTablesOptions
             customTags: false
             tab: webula.smallbackup::lang.settings.tabs.database
 
@@ -79,7 +79,7 @@ tabs:
             label: webula.smallbackup::lang.settings.storage_excluded_resources
             span: right
             type: taglist
-            options: getExcludedResourcesOptions
+            options: getResourcesOptions
             customTags: false
             tab: webula.smallbackup::lang.settings.tabs.storage
 

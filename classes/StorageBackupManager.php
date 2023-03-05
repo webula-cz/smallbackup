@@ -24,13 +24,13 @@ class StorageBackupManager extends BackupManager
     public function backup(string $resource = null, bool $once = false): string
     {
         if ($resource) {
-            $path = config('cms.storage.' . $resource . '.path');
+            $path = array_get($this->getResources(), $resource);
             if (!$path) {
                 throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_resource', ['resource' => $resource]));
             }
             $folders[] = $path;
         } else {
-            $folders = array_diff(array_pluck(config('cms.storage'), 'path'), $this->getExcludedResources());
+            $folders = array_diff($this->getResources(), $this->getExcludedResources());
         }
 
         $folders = collect($folders)->map(function ($folder) {
@@ -54,6 +54,16 @@ class StorageBackupManager extends BackupManager
         }
 
         return $pathname;
+    }
+
+    /**
+     * Get list of available resources
+     *
+     * @return array
+     */
+    protected function getResources(): array
+    {
+        return (array)Settings::instance()->getResourcesOptions();
     }
 
     /**
