@@ -3,7 +3,6 @@
 use File;
 use Exception;
 use October\Rain\Filesystem\Zip;
-use Symfony\Component\Filesystem\Path;
 use Webula\SmallBackup\Models\Settings;
 
 class StorageBackupManager extends BackupManager
@@ -35,7 +34,7 @@ class StorageBackupManager extends BackupManager
         }
 
         $folders = collect($folders)->map(function ($folder) {
-            return Path::canonicalize(base_path($folder));
+            return self::normalizePath(base_path($folder));
         })->filter(function ($folder) {
             return File::isDirectory($folder);
         })->all();
@@ -51,7 +50,7 @@ class StorageBackupManager extends BackupManager
             Zip::make(
                 $pathname,
                 $folders,
-                ['basedir' => Path::normalize(base_path())]
+                ['basedir' => self::normalizePath(base_path())]
             );
         }
 
@@ -76,5 +75,14 @@ class StorageBackupManager extends BackupManager
     protected function getExcludedResources(): array
     {
         return (array)Settings::get('storage_excluded_resources');
+    }
+
+    //
+    // STATIC HELPERS
+    //
+
+    public static function normalizePath($path): string
+    {
+        return rtrim(preg_replace('#([\\\\/]+)#', '/', $path), '/');
     }
 }
