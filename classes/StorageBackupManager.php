@@ -3,6 +3,7 @@
 use File;
 use Exception;
 use October\Rain\Filesystem\Zip;
+use Symfony\Component\Filesystem\Path;
 use Webula\SmallBackup\Models\Settings;
 
 class StorageBackupManager extends BackupManager
@@ -34,7 +35,7 @@ class StorageBackupManager extends BackupManager
         }
 
         $folders = collect($folders)->map(function ($folder) {
-            return base_path($folder);
+            return Path::canonicalize(base_path($folder));
         })->filter(function ($folder) {
             return File::isDirectory($folder);
         })->all();
@@ -49,7 +50,8 @@ class StorageBackupManager extends BackupManager
         if (!$once || !File::exists($pathname)) {
             Zip::make(
                 $pathname,
-                $folders
+                $folders,
+                ['basedir' => Path::normalize(base_path())]
             );
         }
 

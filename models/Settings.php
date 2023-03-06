@@ -1,6 +1,7 @@
 <?php namespace Webula\SmallBackup\Models;
 
 use Model, Db;
+use Symfony\Component\Filesystem\Path;
 
 class Settings extends Model
 {
@@ -24,15 +25,14 @@ class Settings extends Model
     public function getResourcesOptions()
     {
         // OCMSv1
-
         $resources = collect(config('cms.storage'))->where('disk', 'local')->map(function ($item) {
-            return str_after(array_get($item, 'path'), base_path());
+            return str_after(Path::normalize(array_get($item, 'path')), Path::normalize(base_path()));
         })->toArray();
 
         // OCMSv3
         if (empty($resources)) {
             $resources = collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
-                return str_after(array_get($item, 'root'), base_path());
+                return str_after(Path::canonicalize(array_get($item, 'root')), Path::normalize(base_path()));
             })->toArray();
         }
 
