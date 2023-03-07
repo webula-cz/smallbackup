@@ -34,7 +34,7 @@ class StorageBackupManager extends BackupManager
         }
 
         $folders = collect($folders)->map(function ($folder) {
-            return self::normalizePath(base_path($folder));
+            return PathHelper::normalizePath(base_path($folder));
         })->filter(function ($folder) {
             return File::isDirectory($folder);
         })->all();
@@ -43,14 +43,19 @@ class StorageBackupManager extends BackupManager
             throw new Exception(trans('webula.smallbackup::lang.backup.flash.empty_resource'));
         }
 
-        $filename = $this->prefix . str_slug($resource ?: 'all') . '-' .  now()->format('Y-m-d') . '.zip';
-        $pathname = $this->folder . '/' . $filename;
+        $name = $this->prefix . str_slug($resource ?: 'all') . '-' .  now()->format('Y-m-d');
+        $pathname = $this->folder . '/' . $name . '.zip';
 
         if (!$once || !File::exists($pathname)) {
             Zip::make(
                 $pathname,
-                $folders,
-                ['basedir' => self::normalizePath(base_path())]
+                function ($zip) use ($folders, $name) {
+                    $zip->folder($name, function ($zip) use ($folders) {
+                        foreach ($folders as $_folder) {
+                            $zip->add($_folder, ['basedir' => PathHelper::normalizePath(base_path())]);
+                        }
+                    });
+                }
             );
         }
 
@@ -75,14 +80,5 @@ class StorageBackupManager extends BackupManager
     protected function getExcludedResources(): array
     {
         return (array)Settings::get('storage_excluded_resources');
-    }
-
-    //
-    // STATIC HELPERS
-    //
-
-    public static function normalizePath($path): string
-    {
-        return rtrim(preg_replace('#([\\\\/]+)#', '/', $path), '/');
     }
 }
