@@ -28,6 +28,7 @@ return [
             'unknown_theme' => 'Neznámé téma! Téma s kódovým názvem :theme nebylo nalezeno.',
             'unknown_resource' => 'Neznámý zdroj dat! Zdroj dat úložiště s názvem :resource nebyl nalezen.',
             'empty_resource' => 'Požadovaný zdroj dat úložiště je prázdný, není co zálohovat!',
+            'unknown_output' => 'Neznámý typ výstupu, nelze provést zálohu!',
         ],
     ],
 
@@ -68,6 +69,10 @@ return [
 
         'storage_auto' => 'Zapnout automatický režim zálohování úložiště',
         'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
+        'storage_output' => 'Typ výstupu',
+        'storage_output__tar' => 'TAR archív',
+        'storage_output__tar_gz' => 'TAR komprimovaný archív',
+        'storage_output__zip' => 'ZIP komprimovaný archív',
 
         'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
 

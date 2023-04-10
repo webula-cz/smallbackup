@@ -28,6 +28,7 @@ return [
             'unknown_theme' => 'Unknown theme! Cannot find theme with code name :theme.',
             'unknown_resource' => 'Unknown storage resource! Cannot find storage resource :resource.',
             'empty_resource' => 'This resource is empty, nothing to backup!',
+            'unknown_output' => 'Unknown output type, cannot create backup!',
         ],
     ],
 
@@ -67,6 +68,10 @@ return [
 
         'storage_auto' => 'Switch on auto storage backup',
         'storage_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
+        'storage_output' => 'Output type',
+        'storage_output__tar' => 'TAR archive',
+        'storage_output__tar_gz' => 'compressed TAR archive',
+        'storage_output__zip' => 'ZIP archive',
 
         'storage_excluded_resources' => 'Storage folders removed from backup',
 

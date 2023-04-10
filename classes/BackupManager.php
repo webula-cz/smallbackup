@@ -24,7 +24,9 @@ abstract class BackupManager
 
     public function __construct(string $folder = null, string $prefix = null)
     {
-        $this->folder = base_path(trim($folder ?: $this->getBackupFolder(), '/'));
+        $this->folder = base_path(
+            PathHelper::normalizePath(trim($folder ?: $this->getBackupFolder(), DIRECTORY_SEPARATOR))
+        );
 
         if (!File::isDirectory($this->folder))  {
             File::makeDirectory($this->folder, config('cms.defaultMask.folder'), true);
@@ -40,7 +42,7 @@ abstract class BackupManager
      *
      * @param string|null $resource
      * @param bool $once do not overwrite existing backup file
-     * @return string|null file with current backup
+     * @return string file with current backup
      */
     abstract public function backup(string $resource = null, bool $once = false): string;
 
