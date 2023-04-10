@@ -29,7 +29,7 @@ class DbBackupManager extends BackupManager
 
         if ($connectionDriver == 'mysql') {
             $filename = $this->prefix . now()->format('Y-m-d') . '.sql';
-            $pathname = $this->folder . '/' . $filename;
+            $pathname = $this->folder . DIRECTORY_SEPARATOR . $filename;
 
             if (!$once || !File::exists($this->getUseCompression() ? $pathname . '.zip' : $pathname)) {
                 $stream = (new Drivers\Mysql(
@@ -44,7 +44,7 @@ class DbBackupManager extends BackupManager
             }
         } elseif ($connectionDriver == 'sqlite') {
             $filename = $this->prefix . now()->format('Y-m-d') . '.sqlite';
-            $pathname = $this->folder . '/' . $filename;
+            $pathname = $this->folder . DIRECTORY_SEPARATOR . $filename;
 
             if (!$once || !File::exists($this->getUseCompression() ? $pathname . '.zip' : $pathname)) {
                 File::copy(
@@ -58,7 +58,7 @@ class DbBackupManager extends BackupManager
 
         if ($this->getUseCompression() && File::exists($pathname)) {
             $zipFilename = $filename . '.zip';
-            $zipPathname = $this->folder . '/' . $zipFilename;
+            $zipPathname = $this->folder . DIRECTORY_SEPARATOR . $zipFilename;
 
             Zip::make(
                 $zipPathname,

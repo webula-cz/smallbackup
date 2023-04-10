@@ -27,7 +27,7 @@ class ThemeBackupManager extends BackupManager
 
         if ($themeName && File::isDirectory(themes_path($themeName))) {
             $filename = $this->prefix . str_slug($themeName) . '-' . now()->format('Y-m-d') . '.zip';
-            $pathname = $this->folder . '/' . $filename;
+            $pathname = $this->folder . DIRECTORY_SEPARATOR . $filename;
 
             if (!$once || !File::exists($pathname)) {
                 Zip::make(

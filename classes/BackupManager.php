@@ -24,8 +24,8 @@ abstract class BackupManager
 
     public function __construct(string $folder = null, string $prefix = null)
     {
-        $this->folder = base_path(
-            PathHelper::normalizePath(trim($folder ?: $this->getBackupFolder(), DIRECTORY_SEPARATOR))
+        $this->folder = PathHelper::normalizePath(
+            base_path($folder ?: $this->getBackupFolder())
         );
 
         if (!File::isDirectory($this->folder))  {

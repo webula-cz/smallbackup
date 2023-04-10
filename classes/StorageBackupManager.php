@@ -83,7 +83,6 @@ class StorageBackupManager extends BackupManager
 
         switch ($this->getOutput()) {
             case 'tar': case 'tar_gz': $pathname .= '.tar'; break;
-            //case 'tar_gz': $pathname .= '.tar.gz'; break;
             case 'zip': $pathname .= '.zip'; break;
         }
 
@@ -102,7 +101,9 @@ class StorageBackupManager extends BackupManager
     {
         $files = [];
         foreach ($folders as $folder) {
-            $files = array_merge($files, array_map(function ($file) use ($folder) { return $folder . DIRECTORY_SEPARATOR . $file; }, array_diff(scandir($folder), ['.', '..'])));
+            $files = array_merge($files, array_map(function ($file) use ($folder) {
+                return $folder . DIRECTORY_SEPARATOR . $file;
+            }, array_diff(scandir($folder), ['.', '..'])));
         }
 
         File::delete([$pathname, $pathname . '.gz']);
@@ -129,7 +130,7 @@ class StorageBackupManager extends BackupManager
     protected function saveAsZip(string $name, string $pathname, array $folders): string
     {
         $folders = collect($folders)->map(function ($folder) {
-            return PathHelper::linuxPath($folder); // FIX Zip in Windows
+            return PathHelper::linuxPath($folder); // FIX October Zip in Windows
         })->all();
 
         Zip::make(
@@ -137,7 +138,7 @@ class StorageBackupManager extends BackupManager
             function ($zip) use ($folders, $name) {
                 $zip->folder($name, function ($zip) use ($folders) {
                     foreach ($folders as $_folder) {
-                        $zip->add($_folder, ['basedir' => PathHelper::linuxPath(base_path())]);
+                        $zip->add($_folder, ['basedir' => PathHelper::linuxPath(base_path())]); // FIX October Zip in Windows
                     }
                 });
             }
