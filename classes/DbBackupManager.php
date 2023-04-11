@@ -79,7 +79,8 @@ class DbBackupManager extends BackupManager
      */
     protected function getExcludedTables(): array
     {
-        return (array)Settings::get('db_excluded_tables');
+        $data = Settings::get('db_excluded_tables');
+        return is_array($data) ? $data : explode(',', $data);
     }
 
     /**

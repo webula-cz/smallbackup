@@ -81,6 +81,7 @@ tabs:
             options:
                 tar: webula.smallbackup::lang.settings.storage_output__tar
                 tar_gz: webula.smallbackup::lang.settings.storage_output__tar_gz
+                tar_bz2: webula.smallbackup::lang.settings.storage_output__tar_bz2
                 zip: webula.smallbackup::lang.settings.storage_output__zip
             default: tar
             span: right

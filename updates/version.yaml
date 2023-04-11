@@ -12,3 +12,5 @@
     - 'New feature: Backup CMS storage'
 1.2.1:
     - 'Fixed support for OC v3'
+1.2.2:
+    - 'TAR archives support with compression for Backup CMS Storage'

@@ -3,6 +3,7 @@
 use File;
 use Exception;
 use ArrayIterator;
+use Directory;
 use October\Rain\Filesystem\Zip;
 use Phar, PharData;
 use Webula\SmallBackup\Models\Settings;
@@ -45,14 +46,35 @@ class StorageBackupManager extends BackupManager
             throw new Exception(trans('webula.smallbackup::lang.backup.flash.empty_resource'));
         }
 
+        $excludedFolders = array_merge(
+            array_map(function ($folder) {
+                return PathHelper::normalizePath(base_path($folder));
+            }, $this->getExcludedResources()),
+            [$this->folder]
+        );
+        $files = [];
+
+        foreach ($folders as $_folder) {
+            $files = array_merge($files,
+                collect(File::allFiles($_folder))
+                    ->filter(function ($file) use ($excludedFolders) {
+                        return !starts_with($file->getPathname(), $excludedFolders);
+                    })
+                    ->map(function ($file) {
+                        return $file->getPathname();
+                    })
+                    ->all()
+            );
+        }
+
         $name = $this->getOutputFileName($resource);
         $pathname = $this->getOutputPathName($name);
 
         if (!$once || !File::exists($pathname)) {
             switch ($this->getOutput()) {
-                case 'tar': return $this->saveAsTar($pathname, $folders, false);
-                case 'tar_gz': return $this->saveAsTar($pathname, $folders, true);
-                case 'zip': return $this->saveAsZip($name, $pathname, $folders);
+                case 'tar': return $this->saveAsTar($pathname, $files, false);
+                case 'tar_gz': case 'tar_bz2': return $this->saveAsTar($pathname, $files, str_after($this->getOutput(), '_'));
+                case 'zip': return $this->saveAsZip($name, $pathname, $files);
                 default: throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_output'));
             }
         }
@@ -82,7 +104,7 @@ class StorageBackupManager extends BackupManager
         $pathname = $this->folder . DIRECTORY_SEPARATOR . $name;
 
         switch ($this->getOutput()) {
-            case 'tar': case 'tar_gz': $pathname .= '.tar'; break;
+            case 'tar': case 'tar_gz': case 'tar_bz2': $pathname .= '.tar'; break;
             case 'zip': $pathname .= '.zip'; break;
         }
 
@@ -93,27 +115,20 @@ class StorageBackupManager extends BackupManager
      * Save folderlist as TAR archive
      *
      * @param string $pathname path name
-     * @param array $folders list of folders
-     * @param boolean $gz_compression use GZ compression
+     * @param array $folders list of files
+     * @param string|null $compression use compression
      * @return string file with current backup
      */
-    protected function saveAsTar(string $pathname, array $folders, bool $gz_compression = false): string
+    protected function saveAsTar(string $pathname, array $files, ?string $compression = null): string
     {
-        $files = [];
-        foreach ($folders as $folder) {
-            $files = array_merge($files, array_map(function ($file) use ($folder) {
-                return $folder . DIRECTORY_SEPARATOR . $file;
-            }, array_diff(scandir($folder), ['.', '..'])));
-        }
-
-        File::delete([$pathname, $pathname . '.gz']);
+        File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
 
         $archive = new PharData($pathname);
         $archive->buildFromIterator(new ArrayIterator($files), PathHelper::normalizePath(base_path()));
-        if ($gz_compression && $archive->canCompress(Phar::GZ)) {
-            $archive->compress(Phar::GZ);
+        if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
+            $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
             File::delete($pathname);
-            $pathname .= '.gz';
+            $pathname .= '.' . $compression;
         }
 
         return $pathname;
@@ -124,21 +139,21 @@ class StorageBackupManager extends BackupManager
      *
      * @param string $name filename
      * @param string $pathname path name
-     * @param array $folders list of folders
+     * @param array $files list of files
      * @return string file with current backup
      */
-    protected function saveAsZip(string $name, string $pathname, array $folders): string
+    protected function saveAsZip(string $name, string $pathname, array $files): string
     {
-        $folders = collect($folders)->map(function ($folder) {
+        $files = array_map(function ($folder) {
             return PathHelper::linuxPath($folder); // FIX October Zip in Windows
-        })->all();
+        }, $files);
 
         Zip::make(
             $pathname,
-            function ($zip) use ($folders, $name) {
-                $zip->folder($name, function ($zip) use ($folders) {
-                    foreach ($folders as $_folder) {
-                        $zip->add($_folder, ['basedir' => PathHelper::linuxPath(base_path())]); // FIX October Zip in Windows
+            function ($zip) use ($files, $name) {
+                $zip->folder($name, function ($zip) use ($files) {
+                    foreach ($files as $file) {
+                        $zip->add($file, ['basedir' => PathHelper::linuxPath(base_path())]); // FIX October Zip in Windows
                     }
                 });
             }
@@ -174,6 +189,7 @@ class StorageBackupManager extends BackupManager
      */
     protected function getExcludedResources(): array
     {
-        return (array)Settings::get('storage_excluded_resources');
+        $data = Settings::get('storage_excluded_resources');
+        return is_array($data) ? $data : explode(',', $data);
     }
 }

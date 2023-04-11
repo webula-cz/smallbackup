@@ -71,7 +71,8 @@ return [
         'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
         'storage_output' => 'Typ výstupu',
         'storage_output__tar' => 'TAR archív',
-        'storage_output__tar_gz' => 'TAR komprimovaný archív',
+        'storage_output__tar_gz' => 'TAR archív komprimovaný pomocí zlib',
+        'storage_output__tar_bz2' => 'TAR archív komprimovaný pomocí bzip2',
         'storage_output__zip' => 'ZIP komprimovaný archív',
 
         'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
