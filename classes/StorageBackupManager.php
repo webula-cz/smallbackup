@@ -67,6 +67,7 @@ class StorageBackupManager extends BackupManager
             );
         }
 
+
         $name = $this->getOutputFileName($resource);
         $pathname = $this->getOutputPathName($name);
 
@@ -190,6 +191,10 @@ class StorageBackupManager extends BackupManager
     protected function getExcludedResources(): array
     {
         $data = Settings::get('storage_excluded_resources');
-        return is_array($data) ? $data : explode(',', $data);
+        return $data
+            ? (is_array($data) ? $data : explode(',', $data))
+            : []
+        ;
+
     }
 }

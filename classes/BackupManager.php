@@ -29,7 +29,7 @@ abstract class BackupManager
         );
 
         if (!File::isDirectory($this->folder))  {
-            File::makeDirectory($this->folder, config('cms.defaultMask.folder'), true);
+            File::makeDirectory($this->folder, config('cms.defaultMask.folder') ?? 0775, true);
         }
 
         if ($prefix) {
