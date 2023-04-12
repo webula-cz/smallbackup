@@ -4,6 +4,7 @@ use File;
 use Exception;
 use ArrayIterator;
 use Directory;
+use Log;
 use October\Rain\Filesystem\Zip;
 use Phar, PharData;
 use Webula\SmallBackup\Models\Settings;
@@ -128,11 +129,26 @@ class StorageBackupManager extends BackupManager
         File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
 
         $archive = new PharData($pathname);
-        $archive->buildFromIterator(new ArrayIterator($files), PathHelper::normalizePath(base_path()));
+        $truncated = [];
+        foreach ($files as $file) {
+            $relative_name = str_after($file, PathHelper::normalizePath(base_path()));
+            $local_name = PathHelper::tarTruncatePath($relative_name);
+            if ($local_name != $relative_name) {
+                $truncated[$relative_name] = $local_name;
+            }
+            $archive->addFile($file, $local_name);
+        }
+        //$archive->buildFromIterator(new ArrayIterator($files), PathHelper::normalizePath(base_path()));
         if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
             $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
             File::delete($pathname);
             $pathname .= '.' . $compression;
+        }
+
+        if (!empty($truncated)) {
+            Log::warning('This filenames were truncated when creating TAR archive: ' . implode(', ', array_map(function ($local_name, $relative_name) {
+                return $relative_name . ' -> ' . $local_name;
+            }, $truncated, array_keys($truncated))));
         }
 
         return $pathname;

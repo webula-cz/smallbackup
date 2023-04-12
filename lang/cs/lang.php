@@ -75,6 +75,7 @@ return [
         'storage_output__tar_gz' => 'TAR archív komprimovaný pomocí zlib',
         'storage_output__tar_bz2' => 'TAR archív komprimovaný pomocí bzip2',
         'storage_output__zip' => 'ZIP komprimovaný archív',
+        'storage_output__comment' => 'maximální délka názvů souborů u TAR archívu je 256 znaků; delší názvy se oříznou',
 
         'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
 

@@ -74,6 +74,7 @@ return [
         'storage_output__tar_gz' => 'TAR archive compressed with zlib',
         'storage_output__tar_bz2' => 'TAR archive compressed with bzip2',
         'storage_output__zip' => 'ZIP archive',
+        'storage_output__comment' => 'file name max length of TAR archive is 256 characters; otherwise truncated',
 
         'storage_excluded_resources' => 'Storage folders removed from backup',
 
