@@ -67,13 +67,16 @@ class StorageBackupManager extends BackupManager
             );
         }
 
+        if (empty($files)) {
+            throw new Exception(trans('webula.smallbackup::lang.backup.flash.empty_files'));
+        }
 
         $name = $this->getOutputFileName($resource);
         $pathname = $this->getOutputPathName($name);
 
         if (!$once || !File::exists($pathname)) {
             switch ($this->getOutput()) {
-                case 'tar': return $this->saveAsTar($pathname, $files, false);
+                case 'tar': return $this->saveAsTar($pathname, $files);
                 case 'tar_gz': case 'tar_bz2': return $this->saveAsTar($pathname, $files, str_after($this->getOutput(), '_'));
                 case 'zip': return $this->saveAsZip($name, $pathname, $files);
                 default: throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_output'));
@@ -117,7 +120,7 @@ class StorageBackupManager extends BackupManager
      *
      * @param string $pathname path name
      * @param array $folders list of files
-     * @param string|null $compression use compression
+     * @param string|null $compression compression type
      * @return string file with current backup
      */
     protected function saveAsTar(string $pathname, array $files, ?string $compression = null): string

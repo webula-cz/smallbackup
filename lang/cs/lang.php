@@ -28,6 +28,7 @@ return [
             'unknown_theme' => 'Neznámé téma! Téma s kódovým názvem :theme nebylo nalezeno.',
             'unknown_resource' => 'Neznámý zdroj dat! Zdroj dat úložiště s názvem :resource nebyl nalezen.',
             'empty_resource' => 'Požadovaný zdroj dat úložiště je prázdný, není co zálohovat!',
+            'empty_files' => 'Zdroje dat úložiště neobsahují žádne soubory, není co zálohovat!',
             'unknown_output' => 'Neznámý typ výstupu, nelze provést zálohu!',
         ],
     ],

@@ -26,19 +26,23 @@ class Settings extends Model
     {
         // OCMSv1
         $resources = collect(config('cms.storage'))->where('disk', 'local')->map(function ($item) {
-            if (str_starts_with(array_get($item, 'path'), url('/'))) {
-                return PathHelper::normalizePath(str_after(array_get($item, 'path'), url('/')));
+            $resource = array_get($item, 'path');
+            $url = url('/');
+            if (str_starts_with($resource, $url)) {
+                return PathHelper::normalizePath(str_after($resource, $url));
             }
-            return str_after(PathHelper::normalizePath(array_get($item, 'path')), PathHelper::normalizePath(base_path()));
+            return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));
         })->toArray();
 
         // OCMSv3
         if (empty($resources)) {
             $resources = collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
-                if (str_starts_with(array_get($item, 'root'), url('/'))) {
-                    return PathHelper::normalizePath(str_after(array_get($item, 'root'), url('/')));
+                $resource = array_get($item, 'root');
+                $url = url('/');
+                if (str_starts_with($resource, $url)) {
+                    return PathHelper::normalizePath(str_after($resource, $url));
                 }
-                return str_after(PathHelper::normalizePath(array_get($item, 'root')), PathHelper::normalizePath(base_path()));
+                return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));
             })->toArray();
         }
 

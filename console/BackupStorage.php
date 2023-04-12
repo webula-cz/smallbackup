@@ -1,6 +1,7 @@
 <?php namespace Webula\SmallBackup\Console;
 
 use Exception;
+use Log;
 use Webula\SmallBackup\Classes\Console\BackupCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,11 +32,11 @@ class BackupStorage extends BackupCommand
         try {
             $this->output->write('Backup...');
             $file = $manager->backup($this->argument('name'), boolval($this->option('once')));
-
             $this->output->success(
                 trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => $file])
             );
         } catch (Exception $ex) {
+            Log::error($ex->getMessage());
             $this->output->error("Backup failed! " . $ex->getMessage());
         }
 

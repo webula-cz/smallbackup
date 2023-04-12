@@ -28,6 +28,7 @@ return [
             'unknown_theme' => 'Unknown theme! Cannot find theme with code name :theme.',
             'unknown_resource' => 'Unknown storage resource! Cannot find storage resource :resource.',
             'empty_resource' => 'This resource is empty, nothing to backup!',
+            'empty_files' => 'Storage resources does not contain any files, nothing to backup!',
             'unknown_output' => 'Unknown output type, cannot create backup!',
         ],
     ],

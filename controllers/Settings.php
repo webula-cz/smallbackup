@@ -1,10 +1,10 @@
 <?php namespace Webula\SmallBackup\Controllers;
 
-use Lang;
 use Flash;
 use File;
 use Backend;
 use Exception;
+use Log;
 use Request, Response, Redirect;
 use System\Controllers\Settings as SystemSettings;
 use Webula\SmallBackup\Classes\{DbBackupManager, ThemeBackupManager, StorageBackupManager};
@@ -102,6 +102,7 @@ class Settings extends SystemSettings
             return Redirect::refresh();
 
         } catch (Exception $ex) {
+            Log::error($ex->getMessage());
             Flash::error($ex->getMessage());
         }
     }
@@ -121,8 +122,8 @@ class Settings extends SystemSettings
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return \Backend::redirect('webula/smallbackup/settings/update');
         }
-        catch (Exception $ex)
-        {
+        catch (Exception $ex) {
+            Log::error($ex->getMessage());
             Flash::error($ex->getMessage());
         }
     }
@@ -142,8 +143,8 @@ class Settings extends SystemSettings
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return \Backend::redirect('webula/smallbackup/settings/update');
         }
-        catch (Exception $ex)
-        {
+        catch (Exception $ex) {
+            Log::error($ex->getMessage());
             Flash::error($ex->getMessage());
         }
     }
@@ -163,8 +164,8 @@ class Settings extends SystemSettings
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
             return \Backend::redirect('webula/smallbackup/settings/update');
         }
-        catch (Exception $ex)
-        {
+        catch (Exception $ex) {
+            Log::error($ex->getMessage());
             Flash::error($ex->getMessage());
         }
     }
