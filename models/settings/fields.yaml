@@ -80,11 +80,11 @@ tabs:
             comment: webula.smallbackup::lang.settings.storage_output__comment
             type: radio
             options:
+                zip: webula.smallbackup::lang.settings.storage_output__zip
                 tar_unsafe: webula.smallbackup::lang.settings.storage_output__tar_unsafe
                 tar: webula.smallbackup::lang.settings.storage_output__tar
                 tar_gz: webula.smallbackup::lang.settings.storage_output__tar_gz
                 tar_bz2: webula.smallbackup::lang.settings.storage_output__tar_bz2
-                zip: webula.smallbackup::lang.settings.storage_output__zip
             default: tar
             span: right
             tab: webula.smallbackup::lang.settings.tabs.storage
