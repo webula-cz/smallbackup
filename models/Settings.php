@@ -1,6 +1,6 @@
 <?php namespace Webula\SmallBackup\Models;
 
-use Model, Db;
+use Model, Db, Str;
 use Webula\SmallBackup\Classes\PathHelper;
 
 class Settings extends Model
@@ -28,7 +28,7 @@ class Settings extends Model
         $resources = collect(config('cms.storage'))->where('disk', 'local')->map(function ($item) {
             $resource = array_get($item, 'path');
             $url = url('/');
-            if (starts_with($resource, $url)) {
+            if (Str::startsWith($resource, $url)) {
                 return PathHelper::normalizePath(str_after($resource, $url));
             }
             return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));
@@ -39,7 +39,7 @@ class Settings extends Model
             $resources = collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
                 $resource = array_get($item, 'root');
                 $url = url('/');
-                if (starts_with($resource, $url)) {
+                if (Str::startsWith($resource, $url)) {
                     return PathHelper::normalizePath(str_after($resource, $url));
                 }
                 return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));

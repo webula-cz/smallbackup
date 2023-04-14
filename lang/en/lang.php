@@ -20,6 +20,7 @@ return [
         'flash' => [
             'expired_deleted' => ':deleted expired backups were successfully deleted.',
             'successfull_backup' => 'Backup is made in file :file.',
+            'failed_backup' => 'Backup failed: :error.',
 
             'backup_all' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
 
@@ -30,6 +31,8 @@ return [
             'empty_resource' => 'This resource is empty, nothing to backup!',
             'empty_files' => 'Storage resources does not contain any files, nothing to backup!',
             'unknown_output' => 'Unknown output type, cannot create backup!',
+
+            'truncated_filenames' => 'This filenames were truncated when creating TAR archive: :filenames',
         ],
     ],
 
@@ -71,6 +74,8 @@ return [
         'storage_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
         'storage_output' => 'Output type',
         'storage_output__tar' => 'TAR archive',
+        'storage_output__tar_unsafe' => 'TAR archive without filename length check (faster)',
+        'storage_output__tar' => 'TAR archive standard',
         'storage_output__tar_gz' => 'TAR archive compressed with zlib',
         'storage_output__tar_bz2' => 'TAR archive compressed with bzip2',
         'storage_output__zip' => 'ZIP archive',

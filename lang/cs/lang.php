@@ -20,6 +20,7 @@ return [
         'flash' => [
             'expired_deleted' => 'Úspěšně bylo smazáno :deleted expirovaných záloh.',
             'successfull_backup' => 'Záloha je vytvořena v souboru :file.',
+            'failed_backup' => 'Záloha selhala: :error.',
 
             'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny do souborů :files.',
 
@@ -30,6 +31,8 @@ return [
             'empty_resource' => 'Požadovaný zdroj dat úložiště je prázdný, není co zálohovat!',
             'empty_files' => 'Zdroje dat úložiště neobsahují žádne soubory, není co zálohovat!',
             'unknown_output' => 'Neznámý typ výstupu, nelze provést zálohu!',
+
+            'truncated_filenames' => 'Tyto názvy souborů musely v TAR archívu zkráceny: :filenames',
         ],
     ],
 
@@ -71,7 +74,8 @@ return [
         'storage_auto' => 'Zapnout automatický režim zálohování úložiště',
         'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
         'storage_output' => 'Typ výstupu',
-        'storage_output__tar' => 'TAR archív',
+        'storage_output__tar_unsafe' => 'TAR archív bez kontroly délky názvů souborů (rychlejší)',
+        'storage_output__tar' => 'TAR archív standardní',
         'storage_output__tar_gz' => 'TAR archív komprimovaný pomocí zlib',
         'storage_output__tar_bz2' => 'TAR archív komprimovaný pomocí bzip2',
         'storage_output__zip' => 'ZIP komprimovaný archív',

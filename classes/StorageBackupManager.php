@@ -2,9 +2,8 @@
 
 use File;
 use Exception;
-use ArrayIterator;
-use Directory;
 use Log;
+use Str;
 use October\Rain\Filesystem\Zip;
 use Phar, PharData;
 use Webula\SmallBackup\Models\Settings;
@@ -24,6 +23,7 @@ class StorageBackupManager extends BackupManager
      * @param string|null $resource resource
      * @param bool $once do not overwrite existing backup file
      * @return string file with current backup
+     * @throws Exception
      */
     public function backup(string $resource = null, bool $once = false): string
     {
@@ -59,7 +59,7 @@ class StorageBackupManager extends BackupManager
             $files = array_merge($files,
                 collect(File::allFiles($_folder))
                     ->filter(function ($file) use ($excludedFolders) {
-                        return !starts_with($file->getPathname(), $excludedFolders);
+                        return !Str::startsWith($file->getPathname(), $excludedFolders);
                     })
                     ->map(function ($file) {
                         return $file->getPathname();
@@ -77,6 +77,7 @@ class StorageBackupManager extends BackupManager
 
         if (!$once || !File::exists($pathname)) {
             switch ($this->getOutput()) {
+                case 'tar_unsafe': return $this->saveAsTar($pathname, $files, null, true);
                 case 'tar': return $this->saveAsTar($pathname, $files);
                 case 'tar_gz': case 'tar_bz2': return $this->saveAsTar($pathname, $files, str_after($this->getOutput(), '_'));
                 case 'zip': return $this->saveAsZip($name, $pathname, $files);
@@ -109,7 +110,7 @@ class StorageBackupManager extends BackupManager
         $pathname = $this->folder . DIRECTORY_SEPARATOR . $name;
 
         switch ($this->getOutput()) {
-            case 'tar': case 'tar_gz': case 'tar_bz2': $pathname .= '.tar'; break;
+            case 'tar_unsafe': case 'tar': case 'tar_gz': case 'tar_bz2': $pathname .= '.tar'; break;
             case 'zip': $pathname .= '.zip'; break;
         }
 
@@ -122,33 +123,47 @@ class StorageBackupManager extends BackupManager
      * @param string $pathname path name
      * @param array $folders list of files
      * @param string|null $compression compression type
+     * @param bool $unsafe do not check TAR names and truncate them
      * @return string file with current backup
      */
-    protected function saveAsTar(string $pathname, array $files, ?string $compression = null): string
+    protected function saveAsTar(string $pathname, array $files, ?string $compression = null, bool $unsafe = false): string
     {
         File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
 
-        $archive = new PharData($pathname);
         $truncated = [];
-        foreach ($files as $file) {
-            $relative_name = str_after($file, PathHelper::normalizePath(base_path()));
-            $local_name = PathHelper::tarTruncatePath($relative_name);
-            if ($local_name != $relative_name) {
-                $truncated[$relative_name] = $local_name;
+
+        try {
+            $archive = new PharData($pathname);
+            foreach ($files as $file) {
+                $relative_name = str_after($file, PathHelper::normalizePath(base_path()));
+                if (!$unsafe) {
+                    $local_name = PathHelper::tarTruncatePath($relative_name);
+                    if ($local_name != $relative_name) {
+                        $truncated[$relative_name] = $local_name;
+                    }
+                    $archive->addFile($file, $local_name);
+                } else {
+                    $local_name = $relative_name;
+                }
+                $archive->addFile($file, $local_name);
             }
-            $archive->addFile($file, $local_name);
-        }
-        //$archive->buildFromIterator(new ArrayIterator($files), PathHelper::normalizePath(base_path()));
-        if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
-            $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
-            File::delete($pathname);
-            $pathname .= '.' . $compression;
+
+            if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
+                $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
+                File::delete($pathname);
+                $pathname .= '.' . $compression;
+            }
+        } catch (Exception $ex) {
+            File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
+            throw new Exception(trans('webula.smallbackup::lang.backup.flash.failed_backup', ['error' => $ex->getMessage()]));
         }
 
-        if (!empty($truncated)) {
-            Log::warning('This filenames were truncated when creating TAR archive: ' . implode(', ', array_map(function ($local_name, $relative_name) {
-                return $relative_name . ' -> ' . $local_name;
-            }, $truncated, array_keys($truncated))));
+        if (!$unsafe && !empty($truncated)) {
+            Log::warning(trans('webula.smallbackup::lang.backup.flash.truncated_filenames', [
+                'filenames' => collect($truncated)->map(function ($local_name, $relative_name) {
+                    return $relative_name . ' -> ' . $local_name;
+                })->implode(', ')
+            ]));
         }
 
         return $pathname;
@@ -168,16 +183,21 @@ class StorageBackupManager extends BackupManager
             return PathHelper::linuxPath($folder); // FIX October Zip in Windows
         }, $files);
 
-        Zip::make(
-            $pathname,
-            function ($zip) use ($files, $name) {
-                $zip->folder($name, function ($zip) use ($files) {
-                    foreach ($files as $file) {
-                        $zip->add($file, ['basedir' => PathHelper::linuxPath(base_path())]); // FIX October Zip in Windows
-                    }
-                });
-            }
-        );
+        try {
+            Zip::make(
+                $pathname,
+                function ($zip) use ($files, $name) {
+                    $zip->folder($name, function ($zip) use ($files) {
+                        foreach ($files as $file) {
+                            $zip->add($file, ['basedir' => PathHelper::linuxPath(base_path())]); // FIX October Zip in Windows
+                        }
+                    });
+                }
+            );
+        } catch (Exception $ex) {
+            File::delete($pathname);
+            throw new Exception(trans('webula.smallbackup::lang.backup.flash.failed_backup', ['error' => $ex->getMessage()]));
+        }
 
         return $pathname;
     }
