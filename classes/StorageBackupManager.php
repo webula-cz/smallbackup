@@ -77,9 +77,9 @@ class StorageBackupManager extends BackupManager
 
         if (!$once || !File::exists($pathname)) {
             switch ($this->getOutput()) {
-                case 'tar_unsafe': return $this->saveAsTar($pathname, $files, null, true);
-                case 'tar': return $this->saveAsTar($pathname, $files);
-                case 'tar_gz': case 'tar_bz2': return $this->saveAsTar($pathname, $files, str_after($this->getOutput(), '_'));
+                case 'tar_unsafe': return $this->saveAsTar($name, $pathname, $files, null, true);
+                case 'tar': return $this->saveAsTar($name, $pathname, $files);
+                case 'tar_gz': case 'tar_bz2': return $this->saveAsTar($name, $pathname, $files, str_after($this->getOutput(), '_'));
                 case 'zip': return $this->saveAsZip($name, $pathname, $files);
                 default: throw new Exception(trans('webula.smallbackup::lang.backup.flash.unknown_output'));
             }
@@ -117,23 +117,30 @@ class StorageBackupManager extends BackupManager
         return $pathname;
     }
 
+    protected function getTempPathName(string $name, string $extension): string
+    {
+        return temp_path($name . '.backup.' . $extension);
+    }
+
     /**
      * Save folderlist as TAR archive
      *
+     * @param string $name filename
      * @param string $pathname path name
      * @param array $folders list of files
      * @param string|null $compression compression type
      * @param bool $unsafe do not check TAR names and truncate them
      * @return string file with current backup
      */
-    protected function saveAsTar(string $pathname, array $files, ?string $compression = null, bool $unsafe = false): string
+    protected function saveAsTar(string $name, string $pathname, array $files, ?string $compression = null, bool $unsafe = false): string
     {
         File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
+        $temp_pathname = $this->getTempPathName($name, 'tar');
 
         $truncated = [];
 
         try {
-            $archive = new PharData($pathname);
+            $archive = new PharData($temp_pathname);
             foreach ($files as $file) {
                 $relative_name = str_after($file, PathHelper::normalizePath(base_path()));
                 if (!$unsafe) {
@@ -150,12 +157,13 @@ class StorageBackupManager extends BackupManager
 
             if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
                 $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
-                File::delete($pathname);
                 $pathname .= '.' . $compression;
             }
+            File::move($temp_pathname . ($compression ? '.' . $compression : ''), $pathname);
         } catch (Exception $ex) {
-            File::delete([$pathname, $pathname . '.gz', $pathname . '.bz2']);
             throw new Exception(trans('webula.smallbackup::lang.backup.flash.failed_backup', ['error' => $ex->getMessage()]));
+        } finally {
+            File::delete([$temp_pathname, $temp_pathname . '.gz', $temp_pathname . '.bz2']);
         }
 
         if (!$unsafe && !empty($truncated)) {
@@ -179,13 +187,15 @@ class StorageBackupManager extends BackupManager
      */
     protected function saveAsZip(string $name, string $pathname, array $files): string
     {
+        $temp_pathname = $this->getTempPathName($name, 'zip');
+
         $files = array_map(function ($folder) {
             return PathHelper::linuxPath($folder); // FIX October Zip in Windows
         }, $files);
 
         try {
             Zip::make(
-                $pathname,
+                $temp_pathname,
                 function ($zip) use ($files, $name) {
                     $zip->folder($name, function ($zip) use ($files) {
                         foreach ($files as $file) {
@@ -194,9 +204,11 @@ class StorageBackupManager extends BackupManager
                     });
                 }
             );
+            File::move($temp_pathname, $pathname);
         } catch (Exception $ex) {
-            File::delete($pathname);
             throw new Exception(trans('webula.smallbackup::lang.backup.flash.failed_backup', ['error' => $ex->getMessage()]));
+        } finally {
+            File::delete($temp_pathname);
         }
 
         return $pathname;
