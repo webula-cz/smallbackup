@@ -14,3 +14,5 @@
     - 'Fixed support for OC v3'
 1.2.2:
     - 'TAR archives support with compression for Backup CMS Storage'
+1.2.3:
+    - Fine tuned TAR support
