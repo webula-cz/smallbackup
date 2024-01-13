@@ -299,10 +299,10 @@ class Mysql implements Contracts\BackupStream
     {
         $platform = $this->connection->getDoctrineSchemaManager()->getDatabasePlatform();
         if (!$platform->hasDoctrineTypeMappingFor('json')) {
-            $platform->registerDoctrineTypeMapping('json', \Doctrine\DBAL\Types\Type::TEXT);
+            $platform->registerDoctrineTypeMapping('json', 'text');
         }
         if (!$platform->hasDoctrineTypeMappingFor('enum')) {
-            $platform->registerDoctrineTypeMapping('enum', \Doctrine\DBAL\Types\Type::STRING);
+            $platform->registerDoctrineTypeMapping('enum', 'string');
         }
         if (!empty($customMapping)) {
             foreach ($customMapping as $db_type => $doctrine_type) {
