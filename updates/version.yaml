@@ -16,3 +16,5 @@
     - 'TAR archives support with compression for Backup CMS Storage'
 1.2.3:
     - Fine tuned TAR support
+1.3.0:
+    - Added Doctrine 3.0 support
