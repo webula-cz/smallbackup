@@ -3,6 +3,7 @@
 include_once(__DIR__ . '/helpers/helpers.php'); // for version without Composer
 
 use System\Classes\PluginBase;
+use Artisan;
 
 /**
  * SmallBackup Plugin Information File
@@ -44,13 +45,23 @@ class Plugin extends PluginBase
     public function registerSchedule($schedule)
     {
         if (Models\Settings::get('db_auto')) {
-            $schedule->command('smallbackup:db')->daily();
+            // $schedule->command('smallbackup:db')->daily();
+            // Workaround because of shared hostings disables proc_open
+            $schedule->call(function () {
+                Artisan::call('smallbackup:db');
+            })->daily();
         }
         if (Models\Settings::get('theme_auto')) {
-            $schedule->command('smallbackup:theme')->daily();
+            // $schedule->command('smallbackup:theme')->daily();
+            $schedule->call(function () {
+                Artisan::call('smallbackup:theme');
+            })->daily();
         }
         if (Models\Settings::get('storage_auto')) {
-            $schedule->command('smallbackup:storage')->daily();
+            // $schedule->command('smallbackup:storage')->daily();
+            $schedule->call(function () {
+                Artisan::call('smallbackup:storage');
+            })->daily();
         }
     }
 
