@@ -177,7 +177,8 @@ class Settings extends SystemSettings
      */
     private function getSegmentsFromRequest(): array
     {
-        $segments = explode('/', trim(str_after(Request::getUri(), Backend::url()), '/'));
+        $requestPath = parse_url(Request::getUri(), PHP_URL_PATH);
+        $segments = explode('/', trim(str_after($requestPath, config('backend.uri')), '/'));
         return array_pad($segments, 3, null);
     }
 

@@ -22,3 +22,5 @@
     - Scheduler workaround because of disabled proc_open
 1.5.0:
     - Added chinese lang (thanks @ZhiweiWu0425)
+1.5.1:
+    - Improved URI segmentation
