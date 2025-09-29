@@ -19,7 +19,7 @@ class Settings extends Model
     public function getTablesOptions()
     {
         if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return array_column(Db::connection()->getSchemaBuilder()->getTables(), 'name'); // FIX Laravel 11+
+            return array_column(Db::connection()->getSchemaBuilder()->getTables(Db::connection()->getDatabaseName()), 'name'); // FIX Laravel 11+
         } else {
             return Db::connection()->getDoctrineSchemaManager()->listTableNames();
         }

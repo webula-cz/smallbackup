@@ -251,7 +251,7 @@ class Mysql implements Contracts\BackupStream
     protected function getListOfTables(): array
     {
         if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return $this->connection->getSchemaBuilder()->getTables(); // FIX Laravel 11+
+            return $this->connection->getSchemaBuilder()->getTables($this->getDatabaseName()); // FIX Laravel 11+
         } else {
             return $this->connection->getDoctrineSchemaManager()->listTables();
         }
@@ -265,7 +265,7 @@ class Mysql implements Contracts\BackupStream
     protected function getListOfViews(): array
     {
         if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return $this->connection->getSchemaBuilder()->getViews(); // FIX Laravel 11+
+            return $this->connection->getSchemaBuilder()->getViews($this->getDatabaseName()); // FIX Laravel 11+
         } else {
             return $this->connection->getDoctrineSchemaManager()->listViews();
         }
