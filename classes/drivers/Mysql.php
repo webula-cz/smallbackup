@@ -41,7 +41,7 @@ class Mysql implements Contracts\BackupStream
 
         $tables = collect($this->getListOfTables())
             ->map(function ($item) {
-                return $item->getName();
+                return is_object($item) ? $item->getName() : array_get($item, 'name');
             })
             ->diff($this->excludedTables)
             ->toArray();
@@ -58,7 +58,7 @@ class Mysql implements Contracts\BackupStream
 
         $views = collect($this->getListOfViews())
             ->map(function ($item) {
-                return $item->getName();
+                return is_object($item) ? $item->getName() : array_get($item, 'name');
             })
             ->diff($this->excludedTables)
             ->toArray();
@@ -250,7 +250,11 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfTables(): array
     {
-        return $this->connection->getDoctrineSchemaManager()->listTables();
+        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
+            return $this->connection->getSchemaBuilder()->getTables(); // FIX Laravel 11+
+        } else {
+            return $this->connection->getDoctrineSchemaManager()->listTables();
+        }
     }
 
     /**
@@ -260,7 +264,11 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfViews(): array
     {
-        return $this->connection->getDoctrineSchemaManager()->listViews();
+        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
+            return $this->connection->getSchemaBuilder()->getViews(); // FIX Laravel 11+
+        } else {
+            return $this->connection->getDoctrineSchemaManager()->listViews();
+        }
     }
 
     /**
@@ -271,9 +279,13 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfColumns(string $table): array
     {
-        return collect($this->connection->getDoctrineSchemaManager()->listTableColumns($table))
-            ->map(function ($item) {
-                return $item->getName();
+        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
+            $columns = $this->connection->getSchemaBuilder()->getColumns($table); // FIX Laravel 11+
+        } else {
+            $columns = $this->connection->getDoctrineSchemaManager()->listTableColumns($table);
+        }
+        return collect($columns)->map(function ($item) {
+                return is_object($item) ? $item->getName() : array_get($item, 'name');
             })
             ->toArray();
     }
@@ -297,6 +309,10 @@ class Mysql implements Contracts\BackupStream
      */
     protected function syncPlatformMapping(array $customMapping = []): void
     {
+        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
+            return;
+        }
+
         $platform = $this->connection->getDoctrineSchemaManager()->getDatabasePlatform();
         if (!$platform->hasDoctrineTypeMappingFor('json')) {
             $platform->registerDoctrineTypeMapping('json', 'text');

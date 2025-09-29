@@ -24,3 +24,5 @@
     - Added chinese lang (thanks @ZhiweiWu0425)
 1.5.1:
     - Improved URI segmentation
+1.6.0:
+    - Added October CMS 4 support

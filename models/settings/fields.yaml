@@ -105,6 +105,7 @@ tabs:
         db_custom_mapping:
             label: webula.smallbackup::lang.settings.db_custom_mapping
             comment: webula.smallbackup::lang.settings.db_custom_mapping__comment
+            commentAbove: webula.smallbackup::lang.settings.db_custom_mapping__comment_version
             type: repeater
             prompt: webula.smallbackup::lang.settings.db_custom_mapping__prompt
             form:
