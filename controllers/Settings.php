@@ -113,12 +113,11 @@ class Settings extends SystemSettings
     /**
      * onBackup database event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupDb()
     {
         try {
-
             $this->update_onSave();
             Flash::forget('success');
 
@@ -127,7 +126,9 @@ class Settings extends SystemSettings
             $files[] = $manager->backup();
 
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return Backend::redirect('webula/smallbackup/settings/update');
+            return [
+                '#wsb-backups-db' => $this->makePartial('list', ['files' => $this->getDbBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -138,7 +139,7 @@ class Settings extends SystemSettings
     /**
      * onBackup theme event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupTheme()
     {
@@ -151,7 +152,9 @@ class Settings extends SystemSettings
             $files[] = $manager->backup();
 
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return Backend::redirect('webula/smallbackup/settings/update');
+            return [
+                '#wsb-backups-theme' => $this->makePartial('list', ['files' => $this->getThemeBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -162,7 +165,7 @@ class Settings extends SystemSettings
     /**
      * onBackup storage event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupStorage()
     {
@@ -175,7 +178,9 @@ class Settings extends SystemSettings
             $files[] = $manager->backup();
 
             Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return Backend::redirect('webula/smallbackup/settings/update');
+            return [
+                '#wsb-backups-storage' => $this->makePartial('list', ['files' => $this->getStorageBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());

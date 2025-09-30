@@ -1,7 +1,7 @@
 <div class="form-preview m-t-md">
     <h3 class="m-t-0"><?= e(trans('webula.smallbackup::lang.backup.list.storage')) ?></h3>
 
-    <div class="m-t">
+    <div class="m-t" id="wsb-backups-storage">
         <?= $this->makePartial('list', ['files' => $this->getStorageBackupList()]) ?>
     </div>
 
