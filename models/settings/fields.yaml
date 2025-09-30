@@ -26,7 +26,6 @@ tabs:
         webula.smallbackup::lang.settings.tabs.database: icon-database
         webula.smallbackup::lang.settings.tabs.theme: icon-picture-o
         webula.smallbackup::lang.settings.tabs.storage: icon-files-o
-        webula.smallbackup::lang.settings.tabs.settings: icon-cogs
 
     fields:
 
@@ -44,6 +43,7 @@ tabs:
             type: taglist
             options: getTablesOptions
             customTags: false
+            useKey: false
             tab: webula.smallbackup::lang.settings.tabs.database
 
         db_use_compression:
@@ -95,30 +95,10 @@ tabs:
             type: taglist
             options: getResourcesOptions
             customTags: false
+            useKey: false
             tab: webula.smallbackup::lang.settings.tabs.storage
 
         _listing_storage:
             type: partial
             path: $/webula/smallbackup/controllers/settings/_listing-storage.htm
             tab: webula.smallbackup::lang.settings.tabs.storage
-
-        db_custom_mapping:
-            label: webula.smallbackup::lang.settings.db_custom_mapping
-            comment: webula.smallbackup::lang.settings.db_custom_mapping__comment
-            commentAbove: webula.smallbackup::lang.settings.db_custom_mapping__comment_version
-            type: repeater
-            prompt: webula.smallbackup::lang.settings.db_custom_mapping__prompt
-            form:
-                fields:
-                    db_type:
-                        label: webula.smallbackup::lang.settings.db_custom_mapping__db_type
-                        comment: webula.smallbackup::lang.settings.db_custom_mapping__db_type__comment
-                        type: text
-                        span: left
-                    doctrine_type:
-                        label: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type
-                        comment: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type__comment
-                        type: text
-                        span: right
-            span: full
-            tab: webula.smallbackup::lang.settings.tabs.settings

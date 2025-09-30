@@ -18,39 +18,23 @@ class Settings extends Model
 
     public function getTablesOptions()
     {
-        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return array_column(Db::connection()->getSchemaBuilder()->getTables(Db::connection()->getDatabaseName()), 'name'); // FIX Laravel 11+
-        } else {
-            return Db::connection()->getDoctrineSchemaManager()->listTableNames();
-        }
+        $connectionName = config('database.default'); // in backend only default one
+        $connection = Db::connection($connectionName);
+        $tables = $connection->getSchemaBuilder()->getTables($connection->getDatabaseName());
+        return array_column($tables, 'name');
     }
 
 
     public function getResourcesOptions()
     {
-        // OCMSv1
-        $resources = collect(config('cms.storage'))->where('disk', 'local')->map(function ($item) {
-            $resource = array_get($item, 'path');
+        return collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
+            $resource = array_get($item, 'root');
             $url = url('/');
             if (Str::startsWith($resource, $url)) {
                 return PathHelper::normalizePath(str_after($resource, $url));
             }
             return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));
         })->toArray();
-
-        // OCMSv3
-        if (empty($resources)) {
-            $resources = collect(config('filesystems.disks'))->where('driver', 'local')->map(function ($item) {
-                $resource = array_get($item, 'root');
-                $url = url('/');
-                if (Str::startsWith($resource, $url)) {
-                    return PathHelper::normalizePath(str_after($resource, $url));
-                }
-                return str_after(PathHelper::normalizePath($resource), PathHelper::normalizePath(base_path()));
-            })->toArray();
-        }
-
-        return $resources;
     }
 
 }

@@ -2,7 +2,7 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Backup databases and themes',
+        'description' => 'Backup databases, themes and storage',
     ],
 
     'backup' => [
@@ -45,7 +45,7 @@ return [
             'database' => 'Database',
             'theme' => 'Theme',
             'storage' => 'Storage',
-            'settings' => 'Settings',
+            // 'settings' => 'Settings',
         ],
 
         'backup_folder' => 'Backup folder',
@@ -58,15 +58,6 @@ return [
 
         'db_excluded_tables' => 'Tables excluded from backup',
         'db_excluded_tables__comment' => 'Only for MySQL. SQLite is backed up as one file.',
-
-        'db_custom_mapping' => 'Custom MySQL database Doctrine mapping',
-        'db_custom_mapping__prompt' => 'Add new type',
-        'db_custom_mapping__comment' => 'Database column type to be used instead of the original one when exporting database (eg. JSON to be exported as TEXT).',
-        'db_custom_mapping__comment_version' => 'Database column mapping is possible only in October CMS version 1-3.',
-        'db_custom_mapping__db_type' => 'Current database type',
-        'db_custom_mapping__db_type__comment' => 'e.g. json',
-        'db_custom_mapping__doctrine_type' => 'Doctrine type for backup',
-        'db_custom_mapping__doctrine_type__comment' => 'e.g. text',
 
         'theme_auto' => 'Switch on auto theme backup',
         'theme_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',

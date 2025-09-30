@@ -2,7 +2,7 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Zálohování databází a šablon',
+        'description' => 'Zálohování databází, šablon a úložiště',
     ],
 
     'backup' => [
@@ -45,7 +45,7 @@ return [
             'database' => 'Databáze',
             'theme' => 'Šablona',
             'storage' => 'Úložiště',
-            'settings' => 'Nastavení',
+            // 'settings' => 'Nastavení',
         ],
 
         'backup_folder' => 'Adresář pro umístění záloh',
@@ -58,15 +58,6 @@ return [
 
         'db_excluded_tables' => 'Tabulky vyjmuté ze zálohování',
         'db_excluded_tables__comment' => 'Jen pro případ MySQL databází. SQLite se zálohuje celosouborově.',
-
-        'db_custom_mapping' => 'Mapování typů sloupců pro MySQL Doctrine',
-        'db_custom_mapping__prompt' => 'Přidat nový typ',
-        'db_custom_mapping__comment' => 'Typ sloupce, který má být použitý místo originálního při exportu databáze (např. JSON exportovat jako TEXT).',
-        'db_custom_mapping__comment_version' => 'Mapování sloupců je možné pouze v October CMS verze 1-3.',
-        'db_custom_mapping__db_type' => 'Databázový typ',
-        'db_custom_mapping__db_type__comment' => 'např. json',
-        'db_custom_mapping__doctrine_type' => 'Doctrine typ',
-        'db_custom_mapping__doctrine_type__comment' => 'např. text',
 
         'theme_auto' => 'Zapnout automatický režim zálohování aktuálního tématu',
         'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',

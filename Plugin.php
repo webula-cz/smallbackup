@@ -80,7 +80,7 @@ class Plugin extends PluginBase
                 'icon' => 'icon-database',
                 'class' => Models\Settings::class,
                 'url' => \Backend::url('webula/smallbackup/settings/update'),
-                'keywords' => 'database backup',
+                'keywords' => 'backup database theme storage',
                 'order' => 991,
                 'permissions' => ['webula.smallbackup.access_settings'],
             ]

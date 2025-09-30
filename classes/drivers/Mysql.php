@@ -19,12 +19,10 @@ class Mysql implements Contracts\BackupStream
     protected $excludedTables = [];
 
 
-    public function __construct(Connection $connection, array $excludedTables = [], array $customMapping = [])
+    public function __construct(Connection $connection, array $excludedTables = [])
     {
         $this->connection = $connection;
         $this->excludedTables = $excludedTables;
-
-        $this->syncPlatformMapping($customMapping);
     }
 
     /**
@@ -39,13 +37,7 @@ class Mysql implements Contracts\BackupStream
             $this->line() . PHP_EOL
         ;
 
-        $tables = collect($this->getListOfTables())
-            ->map(function ($item) {
-                return is_object($item) ? $item->getName() : array_get($item, 'name');
-            })
-            ->diff($this->excludedTables)
-            ->toArray();
-
+        $tables = array_diff($this->getListOfTables(), $this->excludedTables);
         foreach ($tables as $table) {
             $stream .= $this->comment('Table structure: ' . $this->wrapTable($table)) . PHP_EOL .
                 $this->getDropTableStatement($table) . PHP_EOL .
@@ -56,13 +48,7 @@ class Mysql implements Contracts\BackupStream
             ;
         }
 
-        $views = collect($this->getListOfViews())
-            ->map(function ($item) {
-                return is_object($item) ? $item->getName() : array_get($item, 'name');
-            })
-            ->diff($this->excludedTables)
-            ->toArray();
-
+        $views = array_diff($this->getListOfViews(), $this->excludedTables);
         foreach ($views as $view) {
             $stream .= $this->comment('View structure: ' . $this->wrapTable($view)) . PHP_EOL .
                 $this->getDropViewStatement($view) . PHP_EOL .
@@ -250,11 +236,8 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfTables(): array
     {
-        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return $this->connection->getSchemaBuilder()->getTables($this->getDatabaseName()); // FIX Laravel 11+
-        } else {
-            return $this->connection->getDoctrineSchemaManager()->listTables();
-        }
+        $list = $this->connection->getSchemaBuilder()->getTables($this->getDatabaseName());
+        return array_column($list, 'name');
     }
 
     /**
@@ -264,11 +247,8 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfViews(): array
     {
-        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return $this->connection->getSchemaBuilder()->getViews($this->getDatabaseName()); // FIX Laravel 11+
-        } else {
-            return $this->connection->getDoctrineSchemaManager()->listViews();
-        }
+        $list = $this->connection->getSchemaBuilder()->getViews($this->getDatabaseName());
+        return array_column($list, 'name');
     }
 
     /**
@@ -279,15 +259,8 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getListOfColumns(string $table): array
     {
-        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            $columns = $this->connection->getSchemaBuilder()->getColumns($table); // FIX Laravel 11+
-        } else {
-            $columns = $this->connection->getDoctrineSchemaManager()->listTableColumns($table);
-        }
-        return collect($columns)->map(function ($item) {
-                return is_object($item) ? $item->getName() : array_get($item, 'name');
-            })
-            ->toArray();
+        $list = $this->connection->getSchemaBuilder()->getColumns($table);
+        return array_column($list, 'name');
     }
 
     /**
@@ -298,33 +271,6 @@ class Mysql implements Contracts\BackupStream
     protected function getCharset(): string
     {
         return $this->connection->getConfig('charset');
-    }
-
-
-    /**
-     * Sync doctrine platform mapping
-     *
-     * @param array $customMapping [original_type => backup_type]
-     * @return void
-     */
-    protected function syncPlatformMapping(array $customMapping = []): void
-    {
-        if (class_exists('System') && version_compare(\System::VERSION, '4.0') !== -1) {
-            return;
-        }
-
-        $platform = $this->connection->getDoctrineSchemaManager()->getDatabasePlatform();
-        if (!$platform->hasDoctrineTypeMappingFor('json')) {
-            $platform->registerDoctrineTypeMapping('json', 'text');
-        }
-        if (!$platform->hasDoctrineTypeMappingFor('enum')) {
-            $platform->registerDoctrineTypeMapping('enum', 'string');
-        }
-        if (!empty($customMapping)) {
-            foreach ($customMapping as $db_type => $doctrine_type) {
-                $platform->registerDoctrineTypeMapping($db_type, $doctrine_type);
-            }
-        }
     }
 
 
