@@ -125,7 +125,10 @@ class Settings extends SystemSettings
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
             return [
                 '#wsb-backups-db' => $this->makePartial('list', ['files' => $this->getDbBackupList()])
             ];
@@ -151,7 +154,10 @@ class Settings extends SystemSettings
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
             return [
                 '#wsb-backups-theme' => $this->makePartial('list', ['files' => $this->getThemeBackupList()])
             ];
@@ -177,7 +183,10 @@ class Settings extends SystemSettings
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
             return [
                 '#wsb-backups-storage' => $this->makePartial('list', ['files' => $this->getStorageBackupList()])
             ];
@@ -199,5 +208,4 @@ class Settings extends SystemSettings
         $segments = explode('/', trim(str_after($requestPath, config('backend.uri')), '/'));
         return array_pad($segments, 3, null);
     }
-
 }
