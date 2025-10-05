@@ -82,7 +82,7 @@ is_hidden = 0
 
 ### Manual backup
 
-You can create manual backup in plugin's Settings by clicking button `Backup now` on Database or Theme tab.
+You can create manual backup in plugin's Settings by clicking button `Backup now` on Database, Theme or Storage tab.
 
 #### Console commands
 
