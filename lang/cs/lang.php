@@ -2,7 +2,7 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Zálohování databází a šablon',
+        'description' => 'Zálohování databází, šablon a úložiště',
     ],
 
     'backup' => [
@@ -19,10 +19,10 @@ return [
         ],
         'flash' => [
             'expired_deleted' => 'Úspěšně bylo smazáno :deleted expirovaných záloh.',
-            'successfull_backup' => 'Záloha je vytvořena v souboru :file.',
+            'successfull_backup' => 'Záloha byla vytvořena v souboru :file.',
             'failed_backup' => 'Záloha selhala: :error.',
 
-            'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny do souborů :files.',
+            'backup_all' => 'Úspěšně bylo smazáno :deleted expirovaných záloh. Nové zálohy byly vytvořeny v souborech :files.',
 
             'nothing_to_backup' => 'Nebylo co zálohovat, záloha nevznikla.',
             'unknown_database_driver' => 'Neznámý databázový ovladač :driver! Tento ovladač nebyl ještě implementován. Prosíme zašlete nám své PR.',
@@ -52,27 +52,33 @@ return [
         'backup_folder_comment' => 'Nechte prázdné pro výchozí adresář.',
         'cleanup_interval' => 'Interval ponechání starých záloh (dní)',
         'db_use_compression' => 'Použít ZIP kompresi',
-
-        'db_auto' => 'Zapnout automatický režim zálohování databáze',
-        'db_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
-
+        'db_mode' => 'Režim zálohování databáze',
+        'db_mode__manual' => 'Manuální',
+        'db_mode__manual__comment' => 'Manuální režim vyžaduje uživatelské spuštění procesu dle dokumentace pluginu.',
+        'db_mode__schedule' => 'Automaticky plánovačem',
+        'db_mode__schedule__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS.',
+        'db_mode__trigger' => 'Externím odkazem',
+        'db_mode__trigger__comment' => 'Zálohování je spouštěno externím odkazem (více v nastavení pluginu).',
         'db_excluded_tables' => 'Tabulky vyjmuté ze zálohování',
         'db_excluded_tables__comment' => 'Jen pro případ MySQL databází. SQLite se zálohuje celosouborově.',
 
+        'theme_mode' => 'Režim zálohování témat',
+        'theme_mode__manual' => 'Manuální',
+        'theme_mode__manual__comment' => 'Manuální režim vyžaduje uživatelské spuštění procesu dle dokumentace pluginu.',
+        'theme_mode__schedule' => 'Automaticky plánovačem',
+        'theme_mode__schedule__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS.',
+        'theme_mode__trigger' => 'Externím odkazem',
+        'theme_mode__trigger__comment' => 'Zálohování je spouštěno externím odkazem (více v nastavení pluginu).',
+        'theme_additional_themes' => 'Připojit neaktivní témata',
+        'theme_additional_themes__comment' => 'Automaticky je zálohováno jen aktivní téma. Vyberte další témata, která chcete připojit k zálohování.',
 
-        'db_custom_mapping' => 'Mapování typů sloupců pro MySQL Doctrine',
-        'db_custom_mapping__prompt' => 'Přidat nový typ',
-        'db_custom_mapping__comment' => 'Typ sloupce, který má být použitý místo originálního při exportu databáze (např. JSON exportovat jako TEXT).',
-        'db_custom_mapping__db_type' => 'Databázový typ',
-        'db_custom_mapping__db_type__comment' => 'např. json',
-        'db_custom_mapping__doctrine_type' => 'Doctrine typ',
-        'db_custom_mapping__doctrine_type__comment' => 'např. text',
-
-        'theme_auto' => 'Zapnout automatický režim zálohování aktuálního tématu',
-        'theme_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
-
-        'storage_auto' => 'Zapnout automatický režim zálohování úložiště',
-        'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
+        'storage_mode' => 'Režim zálohování úložiště',
+        'storage_mode__manual' => 'Manuální',
+        'storage_mode__manual__comment' => 'Manuální režim vyžaduje uživatelské spuštění procesu dle dokumentace pluginu.',
+        'storage_mode__schedule' => 'Automaticky plánovačem',
+        'storage_mode__schedule__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS.',
+        'storage_mode__trigger' => 'Externím odkazem',
+        'storage_mode__trigger__comment' => 'Zálohování je spouštěno externím odkazem (více v nastavení pluginu).',
         'storage_output' => 'Typ výstupu',
         'storage_output__tar_unsafe' => 'TAR archív bez kontroly délky názvů souborů (rychlejší)',
         'storage_output__tar' => 'TAR archív standardní',
@@ -80,8 +86,14 @@ return [
         'storage_output__tar_bz2' => 'TAR archív komprimovaný pomocí bzip2',
         'storage_output__zip' => 'ZIP komprimovaný archív',
         'storage_output__comment' => 'Maximální délka názvů souborů u standardního TAR archívu je 256 znaků. Delší názvy se oříznou.',
-
         'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
+        'storage_auto' => 'Povolit automatické zálohování úložiště',
+        'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
 
+        'trigger_key' => 'Variabilní klíč pro spouštění externího zálohování',
+        'trigger_key__comment' => 'Tímto klíčem vznikne plná URL adresa spouštěče zálohování vybraných zdrojů. Celá adresa má potom tvar <strong>'
+            . config('app.url') . '/'
+            . config('webula.smallbackup::trigger.url_prefix')
+            . '{variabilní klíč}</strong><br />Fixní část adresy je možné změnit v konfiguračním souboru.',
     ],
 ];

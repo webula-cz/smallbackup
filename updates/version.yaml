@@ -24,3 +24,6 @@
     - Added chinese lang (thanks @ZhiweiWu0425)
 1.5.1:
     - Improved URI segmentation
+2.0.0:
+    - October CMS 4 only support
+    - reorganize_setting_attributes.php

@@ -2,7 +2,7 @@
 return [
     'plugin' => [
         'name' => 'Small backup',
-        'description' => 'Backup databases and themes',
+        'description' => 'Backup databases, themes and storage',
     ],
 
     'backup' => [
@@ -19,7 +19,7 @@ return [
         ],
         'flash' => [
             'expired_deleted' => ':deleted expired backups were successfully deleted.',
-            'successfull_backup' => 'Backup is made in file :file.',
+            'successfull_backup' => 'Backup was made in file :file.',
             'failed_backup' => 'Backup failed: :error.',
 
             'backup_all' => ':deleted expired backups were successfully deleted. Backup was successfully made into files :files.',
@@ -32,7 +32,7 @@ return [
             'empty_files' => 'Storage resources does not contain any files, nothing to backup!',
             'unknown_output' => 'Unknown output type, cannot create backup!',
 
-            'truncated_filenames' => 'This filenames were truncated when creating TAR archive: :filenames',
+            'truncated_filenames' => 'These file names had to be truncated in the TAR archive: :filenames',
         ],
     ],
 
@@ -50,38 +50,50 @@ return [
 
         'backup_folder' => 'Backup folder',
         'backup_folder_comment' => 'Leave empty for default folder.',
-        'cleanup_interval' => 'Cleanup interval (in days)',
+        'cleanup_interval' => 'Retention period for old backups (days)',
         'db_use_compression' => 'Use ZIP compression',
-
-        'db_auto' => 'Switch on auto database backup',
-        'db_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
-
+        'db_mode' => 'Database backup mode',
+        'db_mode__manual' => 'Manual',
+        'db_mode__manual__comment' => 'Manual mode requires user initiated run according to plugin documentation.',
+        'db_mode__schedule' => 'Automatically by scheduler',
+        'db_mode__schedule__comment' => 'Automatic mode is run once daily by the scheduler according to October CMS documentation.',
+        'db_mode__trigger' => 'By external link',
+        'db_mode__trigger__comment' => 'Backup is triggered by an external link (see plugin settings for details).',
         'db_excluded_tables' => 'Tables excluded from backup',
-        'db_excluded_tables__comment' => 'Only for MySQL. SQLite is backed up as one file.',
+        'db_excluded_tables__comment' => 'Only for MySQL databases. SQLite is backed up as a whole file.',
 
-        'db_custom_mapping' => 'Custom MySQL database Doctrine mapping',
-        'db_custom_mapping__prompt' => 'Add new type',
-        'db_custom_mapping__comment' => 'Database column type to be used instead of the original one when exporting database (eg. JSON to be exported as TEXT).',
-        'db_custom_mapping__db_type' => 'Current database type',
-        'db_custom_mapping__db_type__comment' => 'e.g. json',
-        'db_custom_mapping__doctrine_type' => 'Doctrine type for backup',
-        'db_custom_mapping__doctrine_type__comment' => 'e.g. text',
+        'theme_mode' => 'Theme backup mode',
+        'theme_mode__manual' => 'Manual',
+        'theme_mode__manual__comment' => 'Manual mode requires the user to start the process according to the plugin documentation.',
+        'theme_mode__schedule' => 'Automatically by scheduler',
+        'theme_mode__schedule__comment' => 'Automatic mode is run once daily by the scheduler according to October CMS documentation.',
+        'theme_mode__trigger' => 'By external link',
+        'theme_mode__trigger__comment' => 'Backup is triggered by an external link (see plugin settings for details).',
+        'theme_additional_themes' => 'Include inactive themes',
+        'theme_additional_themes__comment' => 'Only the active theme is backed up automatically. Select additional themes to include.',
 
-        'theme_auto' => 'Switch on auto theme backup',
-        'theme_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
-
-        'storage_auto' => 'Switch on auto storage backup',
-        'storage_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
+        'storage_mode' => 'Storage backup mode',
+        'storage_mode__manual' => 'Manual',
+        'storage_mode__manual__comment' => 'Manual mode requires user initiated run according to plugin documentation.',
+        'storage_mode__schedule' => 'Automatically by scheduler',
+        'storage_mode__schedule__comment' => 'Automatic mode is run once daily by the scheduler according to October CMS documentation.',
+        'storage_mode__trigger' => 'By external link',
+        'storage_mode__trigger__comment' => 'Backup is triggered by an external link (see plugin settings for details).',
         'storage_output' => 'Output type',
-        'storage_output__tar' => 'TAR archive',
         'storage_output__tar_unsafe' => 'TAR archive without filename length check (faster)',
-        'storage_output__tar' => 'TAR archive standard',
+        'storage_output__tar' => 'Standard TAR archive',
         'storage_output__tar_gz' => 'TAR archive compressed with zlib',
         'storage_output__tar_bz2' => 'TAR archive compressed with bzip2',
-        'storage_output__zip' => 'ZIP archive',
-        'storage_output__comment' => 'Maximum length of standard TAR archive file name is 256 characters. Longer names will be truncated.',
+        'storage_output__zip' => 'ZIP compressed archive',
+        'storage_output__comment' => 'Maximum filename length in a standard TAR archive is 256 characters. Longer names are truncated.',
+        'storage_excluded_resources' => 'Storage directories excluded from backup',
+        'storage_auto' => 'Switch on auto storage backup',
+        'storage_auto__comment' => 'The automatic mode is started once a day by the scheduler according to the October CMS documentation. Manual mode requires running the process according to the plugin documentation.',
 
-        'storage_excluded_resources' => 'Storage folders removed from backup',
-
+        'trigger_key' => 'Variable key for triggering external backup',
+        'trigger_key__comment' => 'Using this key a full URL is created to trigger backup of selected sources. The full address has the form <strong>'
+            . config('app.url') . '/'
+            . config('webula.smallbackup::trigger.url_prefix')
+            . '{variable key}</strong><br />The fixed part of the address can be changed in the configuration file.',
     ],
 ];

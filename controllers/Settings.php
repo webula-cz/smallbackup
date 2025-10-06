@@ -86,6 +86,9 @@ class Settings extends SystemSettings
     public function update_onBackup()
     {
         try {
+            $this->update_onSave();
+            Flash::forget('success');
+
             $manager = new DbBackupManager;
             $deleted = $manager->clear();
             $files[] = $manager->backup();
@@ -110,17 +113,25 @@ class Settings extends SystemSettings
     /**
      * onBackup database event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupDb()
     {
         try {
+            $this->update_onSave();
+            Flash::forget('success');
+
             $manager = new DbBackupManager;
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return \Backend::redirect('webula/smallbackup/settings/update');
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
+            return [
+                '#wsb-backups-db' => $this->makePartial('list', ['files' => $this->getDbBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -131,17 +142,25 @@ class Settings extends SystemSettings
     /**
      * onBackup theme event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupTheme()
     {
         try {
+            $this->update_onSave();
+            Flash::forget('success');
+
             $manager = new ThemeBackupManager;
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return \Backend::redirect('webula/smallbackup/settings/update');
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
+            return [
+                '#wsb-backups-theme' => $this->makePartial('list', ['files' => $this->getThemeBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -152,17 +171,25 @@ class Settings extends SystemSettings
     /**
      * onBackup storage event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     public function update_onBackupStorage()
     {
         try {
+            $this->update_onSave();
+            Flash::forget('success');
+
             $manager = new StorageBackupManager;
             $deleted = $manager->clear();
             $files[] = $manager->backup();
 
-            Flash::success(trans('webula.smallbackup::lang.backup.flash.backup_all', ['deleted' => $deleted, 'files' => implode(', ', $files)]));
-            return \Backend::redirect('webula/smallbackup/settings/update');
+            Flash::success(
+                ($deleted > 0 ? trans('webula.smallbackup::lang.backup.flash.expired_deleted', ['deleted' => $deleted]) : '')
+                . trans('webula.smallbackup::lang.backup.flash.successfull_backup', ['file' => implode(', ', $files)])
+            );
+            return [
+                '#wsb-backups-storage' => $this->makePartial('list', ['files' => $this->getStorageBackupList()])
+            ];
         }
         catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -181,5 +208,4 @@ class Settings extends SystemSettings
         $segments = explode('/', trim(str_after($requestPath, config('backend.uri')), '/'));
         return array_pad($segments, 3, null);
     }
-
 }

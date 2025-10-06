@@ -44,20 +44,20 @@ class Plugin extends PluginBase
      */
     public function registerSchedule($schedule)
     {
-        if (Models\Settings::get('db_auto')) {
+        if (Models\Settings::get('db_mode') == 'schedule') {
             // $schedule->command('smallbackup:db')->daily();
             // Workaround because of shared hostings disables proc_open
             $schedule->call(function () {
                 Artisan::call('smallbackup:db');
             })->daily();
         }
-        if (Models\Settings::get('theme_auto')) {
+        if (Models\Settings::get('theme_mode') == 'schedule') {
             // $schedule->command('smallbackup:theme')->daily();
             $schedule->call(function () {
                 Artisan::call('smallbackup:theme');
             })->daily();
         }
-        if (Models\Settings::get('storage_auto')) {
+        if (Models\Settings::get('storage_mode') == 'schedule') {
             // $schedule->command('smallbackup:storage')->daily();
             $schedule->call(function () {
                 Artisan::call('smallbackup:storage');
@@ -80,7 +80,7 @@ class Plugin extends PluginBase
                 'icon' => 'icon-database',
                 'class' => Models\Settings::class,
                 'url' => \Backend::url('webula/smallbackup/settings/update'),
-                'keywords' => 'database backup',
+                'keywords' => 'backup database theme storage',
                 'order' => 991,
                 'permissions' => ['webula.smallbackup.access_settings'],
             ]

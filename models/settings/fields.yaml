@@ -30,26 +30,37 @@ tabs:
 
     fields:
 
-        db_auto:
-            label: webula.smallbackup::lang.settings.db_auto
-            comment: webula.smallbackup::lang.settings.db_auto__comment
+        db_mode:
+            label: webula.smallbackup::lang.settings.db_mode
+            type: radio
+            options:
+                manual:
+                    - webula.smallbackup::lang.settings.db_mode__manual
+                    - webula.smallbackup::lang.settings.db_mode__manual__comment
+                schedule:
+                    - webula.smallbackup::lang.settings.db_mode__schedule
+                    - webula.smallbackup::lang.settings.db_mode__schedule__comment
+                trigger:
+                    - webula.smallbackup::lang.settings.db_mode__trigger
+                    - webula.smallbackup::lang.settings.db_mode__trigger__comment
+            default: manual
+            span: full
+            tab: webula.smallbackup::lang.settings.tabs.database
+
+        db_use_compression:
+            label: webula.smallbackup::lang.settings.db_use_compression
+            span: full
             type: switch
-            span: left
             tab: webula.smallbackup::lang.settings.tabs.database
 
         db_excluded_tables:
             label: webula.smallbackup::lang.settings.db_excluded_tables
             comment: webula.smallbackup::lang.settings.db_excluded_tables__comment
-            span: right
+            span: full
             type: taglist
             options: getTablesOptions
             customTags: false
-            tab: webula.smallbackup::lang.settings.tabs.database
-
-        db_use_compression:
-            label: webula.smallbackup::lang.settings.db_use_compression
-            span: left
-            type: switch
+            useKey: false
             tab: webula.smallbackup::lang.settings.tabs.database
 
         _listing_db:
@@ -57,10 +68,31 @@ tabs:
             path: $/webula/smallbackup/controllers/settings/_listing-db.htm
             tab: webula.smallbackup::lang.settings.tabs.database
 
-        theme_auto:
-            label: webula.smallbackup::lang.settings.theme_auto
-            comment: webula.smallbackup::lang.settings.theme_auto__comment
-            type: switch
+        theme_mode:
+            label: webula.smallbackup::lang.settings.theme_mode
+            type: radio
+            options:
+                manual:
+                    - webula.smallbackup::lang.settings.theme_mode__manual
+                    - webula.smallbackup::lang.settings.theme_mode__manual__comment
+                schedule:
+                    - webula.smallbackup::lang.settings.theme_mode__schedule
+                    - webula.smallbackup::lang.settings.theme_mode__schedule__comment
+                trigger:
+                    - webula.smallbackup::lang.settings.theme_mode__trigger
+                    - webula.smallbackup::lang.settings.theme_mode__trigger__comment
+            default: manual
+            span: full
+            tab: webula.smallbackup::lang.settings.tabs.theme
+
+        theme_additional_themes:
+            label: webula.smallbackup::lang.settings.theme_additional_themes
+            comment: webula.smallbackup::lang.settings.theme_additional_themes__comment
+            span: full
+            type: taglist
+            options: getAdditionalThemesOptions
+            customTags: false
+            useKey: false
             tab: webula.smallbackup::lang.settings.tabs.theme
 
         _listing_theme:
@@ -68,10 +100,20 @@ tabs:
             path: $/webula/smallbackup/controllers/settings/_listing-theme.htm
             tab: webula.smallbackup::lang.settings.tabs.theme
 
-        storage_auto:
-            label: webula.smallbackup::lang.settings.storage_auto
-            comment: webula.smallbackup::lang.settings.storage_auto__comment
-            type: switch
+        storage_mode:
+            label: webula.smallbackup::lang.settings.storage_mode
+            type: radio
+            options:
+                manual:
+                    - webula.smallbackup::lang.settings.storage_mode__manual
+                    - webula.smallbackup::lang.settings.storage_mode__manual__comment
+                schedule:
+                    - webula.smallbackup::lang.settings.storage_mode__schedule
+                    - webula.smallbackup::lang.settings.storage_mode__schedule__comment
+                trigger:
+                    - webula.smallbackup::lang.settings.storage_mode__trigger
+                    - webula.smallbackup::lang.settings.storage_mode__trigger__comment
+            default: manual
             span: left
             tab: webula.smallbackup::lang.settings.tabs.storage
 
@@ -95,6 +137,7 @@ tabs:
             type: taglist
             options: getResourcesOptions
             customTags: false
+            useKey: false
             tab: webula.smallbackup::lang.settings.tabs.storage
 
         _listing_storage:
@@ -102,22 +145,10 @@ tabs:
             path: $/webula/smallbackup/controllers/settings/_listing-storage.htm
             tab: webula.smallbackup::lang.settings.tabs.storage
 
-        db_custom_mapping:
-            label: webula.smallbackup::lang.settings.db_custom_mapping
-            comment: webula.smallbackup::lang.settings.db_custom_mapping__comment
-            type: repeater
-            prompt: webula.smallbackup::lang.settings.db_custom_mapping__prompt
-            form:
-                fields:
-                    db_type:
-                        label: webula.smallbackup::lang.settings.db_custom_mapping__db_type
-                        comment: webula.smallbackup::lang.settings.db_custom_mapping__db_type__comment
-                        type: text
-                        span: left
-                    doctrine_type:
-                        label: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type
-                        comment: webula.smallbackup::lang.settings.db_custom_mapping__doctrine_type__comment
-                        type: text
-                        span: right
+        trigger_key:
+            label: webula.smallbackup::lang.settings.trigger_key
+            comment: webula.smallbackup::lang.settings.trigger_key__comment
+            commentHtml: true
+            type: text
             span: full
             tab: webula.smallbackup::lang.settings.tabs.settings

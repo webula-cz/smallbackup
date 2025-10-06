@@ -1,6 +1,6 @@
 {
     "name": "webula/smallbackup-plugin",
-    "description": "Backup databases and theme",
+    "description": "Backup OctoberCMS databases, themes and storages",
     "homepage": "https://www.webula.cz",
     "type": "october-plugin",
     "authors": [
@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": "^8.2",
+        "october/rain": "^4.0",
         "composer/installers": "~1.0"
     },
     "autoload" : {

@@ -1,6 +1,11 @@
 # Small Backup
 > Simple backup for database (MySQL, SQLite), active theme and CMS storages
 
+## Compatibility
+
+* plugin in version from 2.0.0. is intended **only for OctoberCMS v4 and newer**
+* [older versions](https://github.com/webula-cz/smallbackup/tree/v1) (1.x.x) will run fine only on OctoberCMS v1, v2 and v3
+
 
 ## Installation
 
@@ -61,7 +66,18 @@ There are default scheduler jobs for database and active theme to be backed up o
 
 ### Automatic backup (without scheduler)
 
-If you cannot run Cron command directly on your server/hosting, you can create custom CMS page like this:
+If you cannot run Cron command directly on your server/hosting, you can:
+
+#### Use prepared URL
+
+In plugin's backend settings page go to Settings tab and copy fixed part of the URL (which can be changed in plugin's `config/config.php` file) and a variable part (which can be changed here in Settings tab).
+
+The final URL is in form: `https://www.domain.com/webula/smallbackup/run/trigger-46d62cbc-5e27-4bb0-87dd-19bb0012345678`
+
+Don't forget to allow backups from external URL in plugin's settings tabs (Database, Theme, Storage).
+
+#### Use custom CMS page
+
 
 ```
 title = "artisan"
@@ -82,7 +98,7 @@ is_hidden = 0
 
 ### Manual backup
 
-You can create manual backup in plugin's Settings by clicking button `Backup now` on Database or Theme tab.
+You can create manual backup in plugin's Settings by clicking button `Backup now` on Database, Theme or Storage tab.
 
 #### Console commands
 
