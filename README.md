@@ -74,7 +74,7 @@ In plugin's backend settings page go to Settings tab and copy fixed part of the 
 
 The final URL is in form: `https://www.domain.com/webula/smallbackup/run/trigger-46d62cbc-5e27-4bb0-87dd-19bb0012345678`
 
-Don't forget to allow backups from external URL in plugin's settings tabs (Databse, Theme, Storage).
+Don't forget to allow backups from external URL in plugin's settings tabs (Database, Theme, Storage).
 
 #### Use custom CMS page
 
