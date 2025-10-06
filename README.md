@@ -3,8 +3,8 @@
 
 ## Compatibility
 
-* plugin in version from 2.0.0. is intended only for OctoberCMS v4 and newer
-* older versions (1.x.x) will run fine only on OctoberCMS v1, v2 and v3
+* plugin in version from 2.0.0. is intended **only for OctoberCMS v4 and newer**
+* [older versions](https://github.com/webula-cz/smallbackup/tree/v1) (1.x.x) will run fine only on OctoberCMS v1, v2 and v3
 
 
 ## Installation
