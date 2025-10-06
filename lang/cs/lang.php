@@ -87,6 +87,8 @@ return [
         'storage_output__zip' => 'ZIP komprimovaný archív',
         'storage_output__comment' => 'Maximální délka názvů souborů u standardního TAR archívu je 256 znaků. Delší názvy se oříznou.',
         'storage_excluded_resources' => 'Adresáře úložiště vyjmuté ze zálohování',
+        'storage_auto' => 'Povolit automatické zálohování úložiště',
+        'storage_auto__comment' => 'Automatický režim je spouštěn jednou denně plánovačem dle dokumentace October CMS. Manuální režim vyžaduje spuštění procesu dle dokumentace pluginu.',
 
         'trigger_key' => 'Variabilní klíč pro spouštění externího zálohování',
         'trigger_key__comment' => 'Tímto klíčem vznikne plná URL adresa spouštěče zálohování vybraných zdrojů. Celá adresa má potom tvar <strong>'
