@@ -24,3 +24,5 @@
     - Added chinese lang (thanks @ZhiweiWu0425)
 1.5.1:
     - Improved URI segmentation
+1.5.2:
+    - Fixed backend URI for OctoberCMS v1
