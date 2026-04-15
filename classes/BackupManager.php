@@ -22,7 +22,7 @@ abstract class BackupManager
     protected $prefix;
 
 
-    public function __construct(string $folder = null, string $prefix = null)
+    public function __construct(?string $folder = null, ?string $prefix = null)
     {
         $this->folder = PathHelper::normalizePath(
             base_path($folder ?: $this->getBackupFolder())
@@ -44,7 +44,7 @@ abstract class BackupManager
      * @param bool $once do not overwrite existing backup file
      * @return string file with current backup
      */
-    abstract public function backup(string $resource = null, bool $once = false): string;
+    abstract public function backup(?string $resource = null, bool $once = false): string;
 
     /**
      * Clear expired backups

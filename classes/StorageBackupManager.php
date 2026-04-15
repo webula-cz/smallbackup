@@ -25,7 +25,7 @@ class StorageBackupManager extends BackupManager
      * @return string file with current backup
      * @throws Exception
      */
-    public function backup(string $resource = null, bool $once = false): string
+    public function backup(?string $resource = null, bool $once = false): string
     {
         if ($resource) {
             $path = array_get($this->getResources(), $resource);
@@ -94,7 +94,7 @@ class StorageBackupManager extends BackupManager
      * @param string|null $resource
      * @return string
      */
-    protected function getOutputFileName(string $resource = null): string
+    protected function getOutputFileName(?string $resource = null): string
     {
         return $this->prefix . str_slug($resource ?: 'all') . '-' .  now()->format('Y-m-d');
     }
@@ -155,7 +155,7 @@ class StorageBackupManager extends BackupManager
                 $archive->addFile($file, $local_name);
             }
 
-            if ($compression && $archive->canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
+            if ($compression && Phar::canCompress($compression == 'gz' ? Phar::GZ : Phar::BZ2)) {
                 $archive->compress($compression == 'gz' ? Phar::GZ : Phar::BZ2);
                 $pathname .= '.' . $compression;
             }

@@ -22,7 +22,7 @@ class DbBackupManager extends BackupManager
      * @param bool $once do not overwrite existing backup file
      * @return string file with current backup
      */
-    public function backup(string $resource = null, bool $once = false): string
+    public function backup(?string $resource = null, bool $once = false): string
     {
         $connectionName = $resource ?: config('database.default');
         $connectionDriver = config('database.connections.' . $connectionName . '.driver');

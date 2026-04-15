@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('wsb_backup_db')) {
-    function wsb_backup_db(bool $once = false, string $connectionName = null, bool $noCleanup = false): bool {
+    function wsb_backup_db(bool $once = false, ?string $connectionName = null, bool $noCleanup = false): bool {
         try {
             $manager = new \Webula\SmallBackup\Classes\DbBackupManager;
             if (!$noCleanup) {
@@ -16,7 +16,7 @@ if (!function_exists('wsb_backup_db')) {
 }
 
 if (!function_exists('wsb_backup_theme')) {
-    function wsb_backup_theme(bool $once = false, string $themeName = null, bool $noCleanup = false): bool {
+    function wsb_backup_theme(bool $once = false, ?string $themeName = null, bool $noCleanup = false): bool {
         try {
             $manager = new \Webula\SmallBackup\Classes\ThemeBackupManager;
             if (!$noCleanup) {
@@ -32,7 +32,7 @@ if (!function_exists('wsb_backup_theme')) {
 }
 
 if (!function_exists('wsb_backup_storage')) {
-    function wsb_backup_storage(bool $once = false, string $cmsStorage = null, bool $noCleanup = false): bool {
+    function wsb_backup_storage(bool $once = false, ?string $cmsStorage = null, bool $noCleanup = false): bool {
         try {
             $manager = new \Webula\SmallBackup\Classes\StorageBackupManager;
             if (!$noCleanup) {

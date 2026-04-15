@@ -18,11 +18,19 @@ class Mysql implements Contracts\BackupStream
      */
     protected $excludedTables = [];
 
+    /**
+     * Insert chunk size
+     *
+     * @var int
+     */
+    protected $chunkSize;
 
-    public function __construct(Connection $connection, array $excludedTables = [])
+
+    public function __construct(Connection $connection, array $excludedTables = [], int $chunkSize = 500)
     {
         $this->connection = $connection;
         $this->excludedTables = $excludedTables;
+        $this->chunkSize = $chunkSize;
     }
 
     /**
@@ -32,28 +40,27 @@ class Mysql implements Contracts\BackupStream
      */
     public function backupStream(): string
     {
-        $stream =
-            $this->header() .
-            $this->line() . PHP_EOL
+        $stream = $this->header()
+            . $this->line() . PHP_EOL
         ;
 
         $tables = array_diff($this->getListOfTables(), $this->excludedTables);
         foreach ($tables as $table) {
-            $stream .= $this->comment('Table structure: ' . $this->wrapTable($table)) . PHP_EOL .
-                $this->getDropTableStatement($table) . PHP_EOL .
-                $this->getCreateTableStatement($table) . PHP_EOL .
-                $this->comment('Table data: ' . $this->wrapTable($table)) . PHP_EOL .
-                $this->getInsertStatement($table) . PHP_EOL .
-                $this->line() . PHP_EOL
+            $stream .= $this->comment('Table structure: ' . $this->wrapTable($table)) . PHP_EOL
+                . $this->getDropTableStatement($table) . PHP_EOL
+                . $this->getCreateTableStatement($table) . PHP_EOL
+                . $this->comment('Table data: ' . $this->wrapTable($table)) . PHP_EOL
+                . $this->getInsertStatement($table) . PHP_EOL
+                . $this->line() . PHP_EOL
             ;
         }
 
         $views = array_diff($this->getListOfViews(), $this->excludedTables);
         foreach ($views as $view) {
-            $stream .= $this->comment('View structure: ' . $this->wrapTable($view)) . PHP_EOL .
-                $this->getDropViewStatement($view) . PHP_EOL .
-                $this->getCreateViewStatement($view) . PHP_EOL .
-                $this->line() . PHP_EOL
+            $stream .= $this->comment('View structure: ' . $this->wrapTable($view)) . PHP_EOL
+                . $this->getDropViewStatement($view) . PHP_EOL
+                . $this->getCreateViewStatement($view) . PHP_EOL
+                . $this->line() . PHP_EOL
             ;
         }
 
@@ -131,22 +138,36 @@ class Mysql implements Contracts\BackupStream
      */
     protected function getInsertStatement(string $table): string
     {
-        $columns = $this->getListOfColumns($table);
-        $chunks = collect($this->fetchAll($table, $columns))->chunk(500);
         $output = '';
-        foreach ($chunks as $chunk) {
-            $output .= "INSERT INTO " . $this->wrapTable($table) . " (" . $this->wrap($columns) . ") VALUES";
+
+        $columns = $this->getListOfColumns($table);
+        $query = sprintf(
+            "SELECT %s FROM %s",
+            empty($columns) ? '*' :  $this->wrap($columns),
+            $this->wrapTable($table)
+        );
+
+        $offset = 0;
+        $chunk = [];
+
+        do {
+            $chunk = $this->connection->select("{$query} LIMIT ? OFFSET ?", [$this->chunkSize, $offset]);
+            if (empty($chunk)) {
+                break;
+            }
+
+            $output .= "INSERT INTO " . $this->wrapTable($table) . " (" . $this->wrap($columns) . ") VALUES" . PHP_EOL;
+            $values = [];
             foreach ($chunk as $row) {
-                if ($chunk->first() != $row) {
-                    $output .= ',';
-                }
                 $row = collect($row)->map(function ($value) {
                     return $this->quote($value);
                 });
-                $output .= PHP_EOL . "(" . $row->implode(', ') . ")";
+                $values[] = "(" . $row->implode(', ') . ")";
+                $offset++;
             }
-            $output .= ";" . PHP_EOL;
-        }
+            $output .= implode(',' . PHP_EOL, $values) . ";" . PHP_EOL;
+
+        } while (sizeof($chunk) == $this->chunkSize);
 
         return $output;
     }
@@ -210,7 +231,7 @@ class Mysql implements Contracts\BackupStream
      * @param array|null $columns
      * @return array
      */
-    protected function fetchAll(string $table, array $columns = null): array
+    protected function fetchAll(string $table, ?array $columns = null): array
     {
         if (!empty($columns)) {
             return $this->connection->select("SELECT " . $this->wrap($columns) . " FROM " . $this->wrapTable($table));
@@ -307,7 +328,7 @@ class Mysql implements Contracts\BackupStream
      */
     protected function quote($value): string
     {
-        if (is_numeric($value)) {
+        if (is_integer($value) || is_float($value)) {
             return strval($value);
         } elseif (is_bool($value)) {
             return strval(intval($value));

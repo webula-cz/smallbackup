@@ -22,7 +22,7 @@ class ThemeBackupManager extends BackupManager
      * @param bool $once do not overwrite existing backup file
      * @return string backup file
      */
-    public function backup(string $resource = null, bool $once = false): string
+    public function backup(?string $resource = null, bool $once = false): string
     {
         if ($resource) {
             $themes[] = $resource;

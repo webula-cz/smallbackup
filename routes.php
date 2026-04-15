@@ -2,7 +2,7 @@
 use Webula\SmallBackup\Models\Settings;
 
 Route::get(config('webula.smallbackup::trigger.url_prefix') . '{trigger_key}', function (string $trigger_key) {
-    if (Settings::get('has_trigger') && $trigger_key === Settings::get('trigger_key')) {
+    if (Settings::get('has_trigger') && hash_equals(Settings::get('trigger_key'), $trigger_key)) {
         if (Settings::get('db_mode') == 'trigger') {
             // wsb_backup_db();
             Artisan::call('smallbackup:db');

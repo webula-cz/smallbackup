@@ -81,7 +81,7 @@ class Settings extends SystemSettings
     /**
      * onBackup event
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|void
      */
     public function update_onBackup()
     {
@@ -113,7 +113,7 @@ class Settings extends SystemSettings
     /**
      * onBackup database event
      *
-     * @return \Illuminate\Http\RedirectResponse|array
+     * @return \Illuminate\Http\RedirectResponse|array|void
      */
     public function update_onBackupDb()
     {
@@ -142,7 +142,7 @@ class Settings extends SystemSettings
     /**
      * onBackup theme event
      *
-     * @return \Illuminate\Http\RedirectResponse|array
+     * @return \Illuminate\Http\RedirectResponse|array|void
      */
     public function update_onBackupTheme()
     {
@@ -171,7 +171,7 @@ class Settings extends SystemSettings
     /**
      * onBackup storage event
      *
-     * @return \Illuminate\Http\RedirectResponse|array
+     * @return \Illuminate\Http\RedirectResponse|array|void
      */
     public function update_onBackupStorage()
     {
